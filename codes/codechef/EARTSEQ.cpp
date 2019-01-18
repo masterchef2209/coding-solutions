@@ -1,47 +1,66 @@
 #include<bits/stdc++.h>
 using namespace std;
-//not accepted
+
+int sieve[612000];
+vector<long long>primes;
+void precompute()
+{
+	memset(sieve,0,sizeof(sieve));
+	for(long long i=2;i*i<=612000;i++)
+	{
+		if(sieve[i]==0)
+		{
+			for(int j=2*i;j<=612000;j+=i)
+			{
+				sieve[j]=1;
+			}
+		}
+	}
+	for(long long i=2;i<=612000;i++)
+	{
+		if(sieve[i]==0)
+			primes.emplace_back(i);
+	}
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
+	precompute();
 	int t;
 	cin>>t;
 	while(t--)
 	{
-	    long long n;
-	    cin>>n;
-	    long long n1=n-3;
-		cout<<6<<" "<<15<<" ";
-		long long a=5;
-		int kko=1;
-		while(1)
+		long long n,i=3,nn;
+		cin>>n;
+		cout<<7*5<<" ";
+		long long count=n-2,c=0,j=0;
+		while(count)
 		{
-			if(n1<=0)
-				break;
-			if(a>=3333)
+			if(((j)&1))
+				nn=3;
+			else
+				nn=2;
+			cout<<primes[i]*nn<<" ";
+			if(!(c&1))
 			{
-				cout<<3333*pow(5,++kko)<<" ";
-				a=5;
-				n1--;
-				continue;
-			}
-			if((a+2)%3==0)
-			{
-				cout<<a*(a+4)<<" ";
-				a+=2;
-				n1--;
+				i++;
 			}
 			else
-			{
-				cout<<a*(a+2)<<" ";
-				n1--;
-			}
-			a+=2;
+				j++;
+			c++;
+			count--;
 		}
-		cout<<a*2;
-	cout<<endl;	
+			if(((j)&1))
+				nn=3;
+			else
+				nn=2;
+		if(n%2==0)
+			cout<<primes[i]*5<<" ";
+		else
+			cout<<5*nn<<" ";
+		cout<<endl;
 	}
-return 0;
+	return 0;
 }
