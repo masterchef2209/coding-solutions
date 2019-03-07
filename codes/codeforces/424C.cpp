@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+//#include <boost/multiprecision/cpp_int.hpp>
+//using namespace boost::multiprecision; 
 using namespace std;
 #define pb push_back
 #define eb emplace_back
@@ -21,52 +23,34 @@ typedef vector<ll> vl;
 #define f first
 #define s second
 
-vector< vi >adj(10005);
-vi visited(10005);
-
-int maxCount=INT_MIN;
-int last;
-
-void dfs(int node,int count)
+ll prefixxor(ll k)
 {
-	visited[node]=1;
-	count++;
-	for(auto &x:adj[node])
+	switch(k%4)
 	{
-		if(!visited[x])
-		{
-			if(count>=maxCount)
-			{
-				maxCount=count;
-				last=x;
-			}
-			dfs(x,count);
-		}
+		case 0:return k;
+		case 1:return 1;
+		case 2:return k+1;
+		case 3:return 0;
 	}
 }
 
 int main(){
 	ios_base::sync_with_stdio(false); cin.tie(NULL);cout.tie(NULL);
-	int n;
+	ll n;
 	cin>>n;
-	for(int i=0;i<n-1;i++)
+	ll p=0;
+	for(ll i=0;i<n;i++)
 	{
-		int a,b;
-		cin>>a>>b;
-		adj[a].eb(b);
-		adj[b].eb(a);
+		ll temp;
+		cin>>temp;
+		p^=temp;
 	}
-	for(int i=0;i<=n;i++)
+	ll ans=0;
+	for(int i=1;i<=n;i++)
 	{
-		visited[i]=0;
+		ans^=(((n/i)%2)*prefixxor(i-1))^(prefixxor(n%i));
 	}
-	dfs(1,1);
-	for(int i=0;i<=n;i++)
-	{
-		visited[i]=0;
-	}
-	maxCount=INT_MIN;
-	dfs(last,1);
-	cout<<maxCount-1<<endl;
+	ans^=p;
+	cout<<ans<<endl;
     return 0;
 }

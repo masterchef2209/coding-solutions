@@ -12,20 +12,30 @@ struct SegmentTreeNode {
   // variables to store aggregate statistics and
   // any other information required to merge these
   // aggregate statistics to form parent nodes
-	ll maxvalue;
+	ll maxvalue,i;
     
-  void assignLeaf(ll value) {
+  void assignLeaf(pair<ll,ll> value) {
     // T is the type of input array element
     // Given the value of an input array element,
     // build aggregate statistics for this leaf node
-  	maxvalue=value;
+  	i=value.first;
+    maxvalue=value.second;
   }
   
   void merge(SegmentTreeNode& left, SegmentTreeNode& right) {
     // merge the aggregate statistics of left and right
     // children to form the aggregate statistics of
     // their parent node
-    maxvalue=max(left.maxvalue,right.maxvalue);
+    if(left.second>=right.second)
+    {
+      maxvalue=left.second;
+      i=left.first
+    }
+    else
+    {
+      maxvalue=right.second;
+      i=right.first;
+    }
   }
   
   int getValue() {
@@ -135,13 +145,12 @@ int main(){
 		dp[j]=a[j];
 	}
 	SegmentTree<ll,int> st(dp,n);
-	ll ans=0;
+	ll temp=0;
 	for(int i=1;i<n;i++)
 	{
-		ll temp=st.getValue(0,i-1);
-		ans=max(ans,temp);
-		st.update(i,ans);
+		temp=st.getValue(0,i-1);
+		st.update(i,mp(i,max(a[i]+temp,a[i])));
 	}
-	cout<<ans<<endl;
+	cout<<temp<<endl;
     return 0;
 }
