@@ -5,7 +5,7 @@ using namespace std;
 ll prefixsum[100005];
 ll n,k;
 string s;
-void initi()
+void preprocess()
 {
 	for(int i=0;i<n;i++)
 	{
@@ -38,7 +38,7 @@ int main()
 	{
 		cin>>n>>k;
 		cin>>s;
-        initi();
+        preprocess();
 		ll den=n*n;
 		ll num=0;
 		for(ll i=0;i<n;i++)
