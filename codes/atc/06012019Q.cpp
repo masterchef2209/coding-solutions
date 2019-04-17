@@ -6,151 +6,54 @@ using namespace std;
 #define mp(x,y) make_pair(x,y)
 #define mod 1000000007
 double PI=3.1415926535897932384626;
-//not accepted
-struct SegmentTreeNode {
 
-  // variables to store aggregate statistics and
-  // any other information required to merge these
-  // aggregate statistics to form parent nodes
-	ll maxvalue,i;
-    
-  void assignLeaf(pair<ll,ll> value) {
-    // T is the type of input array element
-    // Given the value of an input array element,
-    // build aggregate statistics for this leaf node
-  	i=value.first;
-    maxvalue=value.second;
-  }
-  
-  void merge(SegmentTreeNode& left, SegmentTreeNode& right) {
-    // merge the aggregate statistics of left and right
-    // children to form the aggregate statistics of
-    // their parent node
-    if(left.second>=right.second)
-    {
-      maxvalue=left.second;
-      i=left.first
-    }
-    else
-    {
-      maxvalue=right.second;
-      i=right.first;
-    }
-  }
-  
-  int getValue() {
-    // V is the type of the required aggregate statistic
-    // return the value of required aggregate statistic
-    // associated with this node
-    return maxvalue;
-  }
-};
+vector<ll>dp(2*500005,0);
+ll n;
 
 
+ll query(ll pos)
+{
+  ll ans=0;
+  while(pos>=1)
+  {
+    ans=max(ans,dp[pos]);
+    pos-=(pos&-pos);
+  }
+  return ans;
+}
 
-// T is the type of input array elements
-// V is the type of required aggregate statistic
-template<class T, class V>
-class SegmentTree {
-  SegmentTreeNode* nodes;
-  int N;
-
-public:
-  SegmentTree(T arr[], int N) {
-    this->N = N;
-    nodes = new SegmentTreeNode[getSegmentTreeSize(N)];
-    buildTree(arr, 1, 0, N-1);
+void update(ll pos,ll val)
+{
+  while(pos<=n)
+  {
+    dp[pos]=max(dp[pos],val);
+    pos+=(pos&-pos);
   }
-  
-  ~SegmentTree() {
-    delete[] nodes;
-  }
-  
-  V getValue(int lo, int hi) {
-    SegmentTreeNode result = getValue(1, 0, N-1, lo, hi);
-    return result.getValue();
-  }
-  
-  void update(int index, T value) {
-    update(1, 0, N-1, index, value);
-  }
-  
-  private:	
-  void buildTree(T arr[], int stIndex, int lo, int hi) {
-    if (lo == hi) {
-      nodes[stIndex].assignLeaf(arr[lo]);
-      return;
-    }
-    
-    int left = 2 * stIndex, right = left + 1, mid = (lo + hi) / 2;
-    buildTree(arr, left, lo, mid);
-    buildTree(arr, right, mid + 1, hi);
-    nodes[stIndex].merge(nodes[left], nodes[right]);
-  }
-  
-  SegmentTreeNode getValue(int stIndex, int left, int right, int lo, int hi) {
-    if (left == lo && right == hi)
-      return nodes[stIndex];
-    	
-    int mid = (left + right) / 2;
-    if (lo > mid)
-      return getValue(2*stIndex+1, mid+1, right, lo, hi);
-    if (hi <= mid)
-      return getValue(2*stIndex, left, mid, lo, hi);
-    	
-    SegmentTreeNode leftResult = getValue(2*stIndex, left, mid, lo, mid);
-    SegmentTreeNode rightResult = getValue(2*stIndex+1, mid+1, right, mid+1, hi);
-    SegmentTreeNode result;
-    result.merge(leftResult, rightResult);
-    return result;
-  }
-  
-  int getSegmentTreeSize(int N) {
-    int size = 1;
-    for (; size < N; size <<= 1);
-    return size << 1;
-  }
-  
-  void update(int stIndex, int lo, int hi, int index, T value) {
-    if (lo == hi) {
-    nodes[stIndex].assignLeaf(value);
-    return;
-    }
-    
-    int left = 2 * stIndex, right = left + 1, mid = (lo + hi) / 2;
-    if (index <= mid)
-      update(left, lo, mid, index, value);
-    else
-      update(right, mid+1, hi, index, value);
-    
-    nodes[stIndex].merge(nodes[left], nodes[right]);
-  }
-};
-
+}
 
 int main(){
-	ios_base::sync_with_stdio(false); cin.tie(NULL);cout.tie(NULL);
-	int n;
-	cin>>n;
-	int h[n];
-	ll a[n];
-	ll dp[500005];
-	for(int i=0;i<n;i++)
-	{
-		cin>>h[i];
-	}
-	for(int j=0;j<n;j++)
-	{
-		cin>>a[j];
-		dp[j]=a[j];
-	}
-	SegmentTree<ll,int> st(dp,n);
-	ll temp=0;
-	for(int i=1;i<n;i++)
-	{
-		temp=st.getValue(0,i-1);
-		st.update(i,mp(i,max(a[i]+temp,a[i])));
-	}
-	cout<<temp<<endl;
+  ios_base::sync_with_stdio(false); cin.tie(NULL);cout.tie(NULL);
+  cin>>n;
+  ll h[n];
+  ll a[n];
+  for(ll i=1;i<=n;i++)
+  {
+    cin>>h[i];
+  }
+  for(ll j=1;j<=n;j++)
+  {
+    cin>>a[j];
+  }
+  //base case
+  update(h[1],a[1]);
+
+
+
+  for(ll flower=2;flower<=n;flower++)
+  {
+      ll temp=query(h[flower])+a[flower];
+      update(h[flower],temp);
+  }
+  cout<<query(n)<<endl;
     return 0;
 }
