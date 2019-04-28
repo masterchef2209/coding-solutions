@@ -1,4 +1,4 @@
-//A B C D H F E I G K L M N P S O Q R J U Z Y X T V W
+//a b c d h f e i g k l m n p s O q R J U Z Y X T V W
 #include<bits/stdc++.h>
 using namespace std;
 
