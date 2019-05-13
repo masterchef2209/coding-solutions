@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-//Flood fill baby
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -38,87 +37,53 @@ typedef vector<ll> vl;
 //#define fi1 ifstream fin("input.txt")
 //#define of1 ofstream fout("output.txt")
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
-
+#define int long long
 #define fi first
 #define se second
-#define pt pair<int,int>
-int n,m;
 
-int dr[4]={0,0,1,-1};
-int dc[4]={1,-1,0,0};
+int dist[105][105];
 
-int grid[110][110];
-bool visited[110][110];
-
-priority_queue< pair<int,pt > ,vector< pair<int,pt > >,greater< pair<int,pt > > > pq;
-
-inline bool ingrid(pt x)
-{
-	return (x.fi>=1 && x.fi<=n && x.se>=1 && x.se<=m);
-}
-
-int main()
+signed main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	int t;
-	cin>>t;
-	while(t--)
+	int n,e,t,m;
+	cin>>n>>e>>t>>m;
+	for(int i=1;i<=n;i++)
 	{
-		ll ans=0;
-		cin>>n>>m;
-		pq=priority_queue< pair<int,pt > ,vector< pair<int,pt > >,greater< pair<int,pt > > >();
+		for(int j=1;j<=n;j++)
+		{
+			if(i==j)
+				dist[i][j]=0;
+			else
+				dist[i][j]=INT_MAX;
+		}
+	}
+	for(int u=0;u<m;u++)
+	{
+		int a,b,w;
+		cin>>a>>b>>w;
+		dist[a][b]=w;
+	}
+	for(int k=1;k<=n;k++)
+	{
 		for(int i=1;i<=n;i++)
 		{
-			for(int j=1;j<=m;j++)
+			for(int j=1;j<=n;j++)
 			{
-				visited[i][j]=false;
-				cin>>grid[i][j];
-				if(i==1 || j==1 || i==n || j==m)
-				{
-					pq.push(mp(grid[i][j],mp(i,j)));
-				}
+				dist[i][j]=min(dist[i][j],dist[i][k]+dist[k][j]);
 			}
 		}
-		while(!pq.empty())
-		{
-			pt point=pq.top().se;
-			int height=grid[point.fi][point.se];
-			pq.pop();
-			if(visited[point.fi][point.se])
-				continue;
-		    //cout<<point.fi<<" "<<point.se<<endl;
-		    
-			queue< pt >Q;
-			Q.push( point );
-			visited[point.fi][point.se]=true;
- 			while(!Q.empty())
-			{
-				pt po=Q.front();
-				Q.pop();
-				for(int u=0;u<4;u++)
-				{
-					pt npo=mp(po.fi+dr[u],po.se+dc[u]);
-					if(ingrid(npo) && !visited[npo.fi][npo.se])
-					{
-						int nheight=grid[npo.fi][npo.se];
-						if(nheight>height)
-						{
-							pq.push(mp(nheight,npo));
-						}
-						else
-						{
-							ans+=(height-nheight);
-						//	grid[npo.fi][npo.se]=height;
-							visited[npo.fi][npo.se]=true;
-							Q.push(npo);
-						}
-					}
-				}
- 			}
- 			//cout<<ans<<endl;
-		}
-		cout<<ans<<endl;
 	}
+	int ans=0;
+	for(int c=1;c<=n;c++)
+	{
+		if(dist[c][e]<=t)
+		{
+		    //cout<<c<<" "<<dist[c][e]<<endl;
+			ans++;
+		}
+	}
+	cout<<ans;
     return 0;
 }

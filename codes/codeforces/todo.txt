@@ -1,3 +1,27 @@
 C:-
 Cloud Computing
 https://codeforces.com/contest/1152/problem/C
+
+
+till  2000
+dp
+graph
+Fenwick Tree
+binary search
+combinactorics
+
+
+
+scc-427C
+bridges-uva 796
+articulation points-uva 10199
+
+condition for bridges:-
+	id[from]<low[to] => (from,to) is bridge
+condition for articulation points:
+	(source node) => number of children>1 => source is A.P.
+	(non source node) => id[from]<=low[to] => from is A.P.
+idea for scc(tarjans):-
+	update lowlink value of a node using only those children who are on the "stack".
+	if id[curr]==low[curr] => a SCC is found with lowlink values of all nodes in this SCC equal to id[curr].
+	unlike bridges and A.P. parent of a node is not required in dfs in tarjans algo.
