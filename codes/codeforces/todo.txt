@@ -1,7 +1,7 @@
 C:-
 Cloud Computing
 https://codeforces.com/contest/1152/problem/C
-
+uva-12442
 
 till  2000
 dp
@@ -10,8 +10,9 @@ Fenwick Tree
 binary search
 combinactorics
 
+yC-Sagheer,the Hausmeister
 
-
+-----------------------------------------------------------------------------
 scc-427C
 bridges-uva 796
 articulation points-uva 10199
