@@ -12,10 +12,14 @@ combinactorics
 
 yC-Sagheer,the Hausmeister
 
+
+9.1099099099099
+
 -----------------------------------------------------------------------------
 scc-427C
 bridges-uva 796
 articulation points-uva 10199
+dsu-400D
 
 condition for bridges:-
 	id[from]<low[to] => (from,to) is bridge
