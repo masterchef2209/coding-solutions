@@ -35,84 +35,44 @@ typedef vector<ii> vii;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
 
-//#define fi1 ifstream cin("input.txt")
-//#define of1 ofstream cout("output.txt")
+//#define fi1 ifstream fin("input.txt")
+//#define of1 ofstream fout("output.txt")
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
 
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
+vector< pair<ll,ll> >points;
+map< pair<ll,ll>,ll>dp;
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
 	ll n;
 	cin>>n;
-	for(ll i=0;i<2*n;i++)
+
+	for(ll i=1;i<=n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
+		ll x,y;
+		cin>>x>>y;
+		points.eb(x,y);
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
+	sort(points.begin(),points.end());
+	for(ll i=0;i<n;i++)
 	{
-		if(sieve[*it]!=0)
+		for(ll j=i+1;j<n;j++)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
-		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			ll tp=points[j].fi-points[i].fi;
+			ll tq=points[j].se-points[i].se;
+			dp[mp(tp,tq)]++;
 		}
 	}
-	for(auto &x:a)
+	ll ans=n;
+	for(auto &x:dp)
 	{
-	    cout<<x<<" ";
+		ans=min(ans,n-x.se);
 	}
+	cout<<ans;
     return 0;
 }

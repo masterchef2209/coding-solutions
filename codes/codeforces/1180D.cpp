@@ -7,7 +7,7 @@
 using namespace std;
 //using namespace __gnu_pbds;
 
-typedef long long ll;
+typedef int ll;
 typedef long double ld;
 typedef complex<ld> cd;
 
@@ -39,80 +39,73 @@ typedef vector<ll> vl;
 //#define of1 ofstream cout("output.txt")
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
 
+#define endl "\n"
+
 #define fi first
 #define se second
-
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	ll n;
-	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	ll n,m;
+	cin>>n>>m;
+	ll one1=1,one2=1,two1=n,two2=m,dir1=0,dir2=1;
+	ll fill=0;
+	while(fill<=(n*m))
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
-	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
-	{
-		if(sieve[*it]!=0)
+		if(fill==(n*m))
+		    break;
+		cout<<one1<<" "<<one2<<endl;
+		fill++;
+		if(fill==(n*m))
+		    break;
+		cout<<two1<<" "<<two2<<endl;
+		fill++;
+		if(fill==(n*m))
+		    break;
+		if(one1==n && dir1==0)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
+			one2++;
+			dir1=1;
+		}
+		else if(one1==1 && dir1==1)
+		{
+			one2++;
+			dir1=0;
 		}
 		else
 		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			if(dir1==0)
+			{
+				one1++;
+			}
+			else
+			{
+				one1--;
+			}
 		}
-	}
-	for(auto &x:a)
-	{
-	    cout<<x<<" ";
+		if(two1==n && dir2==0)
+		{
+			two2--;
+			dir2=1;
+		}
+		else if(two1==1 && dir2==1)
+		{
+			two2--;
+			dir2=0;
+		}
+		else
+		{
+			if(dir2==0)
+			{
+				two1++;
+			}
+			else
+			{
+				two1--;
+			}
+		}
 	}
     return 0;
 }

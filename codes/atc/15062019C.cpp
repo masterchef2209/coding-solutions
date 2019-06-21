@@ -1,5 +1,8 @@
 		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
+
+//not accepted
+
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -35,84 +38,48 @@ typedef vector<ii> vii;
 typedef vector<ld> vd;
 typedef vector<ll> vl;
 
-//#define fi1 ifstream cin("input.txt")
-//#define of1 ofstream cout("output.txt")
+//#define fi1 ifstream fin("input.txt")
+//#define of1 ofstream fout("output.txt")
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
 
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
+vector<ll>vv;
+vector< pair<ll,ll> >ans;
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
 	ll n;
 	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	for(ll u=0;u<n;u++)
 	{
 		ll tmp;
 		cin>>tmp;
-		b.insert(tmp);
+		vv.eb(tmp);
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
+	sort(vv.begin(),vv.end());
+	ll a=vv[0];
+	ll b=vv[n-1];
+	for(ll i=1;i<n-1;i++)
 	{
-		if(sieve[*it]!=0)
+		if(vv[i]<0)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
+			ans.eb(b,vv[i]);
+			b-=vv[i];
 		}
 		else
 		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			ans.eb(a,vv[i]);
+			a-=vv[i];
 		}
 	}
-	for(auto &x:a)
+	ans.eb(b,a);
+	cout<<b-a<<endl;
+	for(auto &x:ans)
 	{
-	    cout<<x<<" ";
+		cout<<x.fi<<" "<<x.se<<endl;
 	}
     return 0;
 }

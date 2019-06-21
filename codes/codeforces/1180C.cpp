@@ -42,77 +42,76 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	ll n;
-	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	ll n,q;
+	cin>>n>>q;
+	vector<ll>arr(n);
+	ll val=-1,haha=-1;
+	for(ll i=0;i<n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
-	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
-	{
-		if(sieve[*it]!=0)
+		cin>>arr[i];
+		if(arr[i]>haha)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
-		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			haha=arr[i];
+			val=i;
 		}
 	}
-	for(auto &x:a)
+	vector< pair<ll,ll> >qq(n+1);
+//	cout<<arr[0]<<" "<<arr[1]<<endl;
+    vector<ll>idiot;
+    ll tmp;
+    if(val>0)
+    {
+        qq[1]=mp(arr[0],arr[1]);
+        tmp=max(arr[0],arr[1]);
+	    idiot.eb(min(arr[0],arr[1]));
+    }
+	for(ll i=2;i<=val;i++)
 	{
-	    cout<<x<<" ";
+	   // cout<<tmp<<" "<<arr[i]<<endl;
+		qq[i]=mp(tmp,arr[i]);
+		idiot.eb(min(tmp,arr[i]));
+		tmp=max(tmp,arr[i]);
+	    
 	}
+	vector<ll>fuck(n);
+	ll cry=0;
+	for(ll i=val+1;i<n;i++)
+	{
+	    fuck[cry++]=arr[i];
+	}
+	for(auto &x:idiot)
+	{
+	   // cout<<x<<endl;
+	    fuck[cry++]=x;
+	    if(cry==n)
+	        break;
+	}
+// 	for(ll i=0;i<n-1;i++)
+// 	{
+// 	    cout<<fuck[i]<<" ";
+// 	}
+    // for(ll i=1;i<=val;i++)
+    // {
+    //     cout<<qq[val].fi<<" "<<qq[val].se<<endl;
+    // }
+    while(q--)
+    {
+        ll hah;
+        cin>>hah;
+        if(hah<=val)
+        {
+            cout<<qq[hah].fi<<" "<<qq[hah].se<<endl;
+        }
+        else
+        {
+            ll hoho=n-1;
+            unsigned long long sed=(hah-val-1+hoho)%hoho;
+            cout<<haha<<" "<<fuck[sed]<<endl;
+        }
+    }
     return 0;
 }

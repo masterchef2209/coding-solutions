@@ -42,77 +42,72 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
 	ll n;
 	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	for(ll i=1;i<=n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
-	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
-	{
-		if(sieve[*it]!=0)
+		string s,t;
+		cin>>s>>t;
+		vector< pair< char,ll> >mm,mm1;
+		for(ll i=0;i<s.size();)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
+			ll c=1;
+			while((i+1)<s.size() && s[i]==s[i+1])
+			{
+				c++;
+				i++;
+			}
+			mm.eb(s[i],c);
+			i++;
+		}
+		for(ll i=0;i<t.size();)
+		{
+			ll c=1;
+			while((i+1)<t.size() && t[i]==t[i+1])
+			{
+				c++;
+				i++;
+			}
+			mm1.eb(t[i],c);
+			i++;
+		}
+		if(mm.size()!=mm1.size())
+		{
+		    cout<<"NO\n";
 		}
 		else
 		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+		    ll po=0;
+		    int flag=1;
+		    while(po<mm.size())
+		    {
+		        if(mm[po].fi==mm1[po].fi)
+		        {
+		            if(mm1[po].se>=mm[po].se)
+		            {
+		            }
+		            else
+		            {
+		                flag=0;
+		                break;
+		            }
+		        }
+		        else
+		        {
+		            flag=0;
+		            break;
+		        }
+		        po++;
+		    }
+		    if(flag==1)
+		        cout<<"YES\n";
+		    else
+		        cout<<"NO\n";
 		}
-	}
-	for(auto &x:a)
-	{
-	    cout<<x<<" ";
 	}
     return 0;
 }

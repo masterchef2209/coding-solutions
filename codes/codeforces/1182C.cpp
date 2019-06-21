@@ -42,77 +42,78 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
+struct stanza
 {
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
+	string word1,word2;
+};
 
+vector<string> mm[100005][26];
 
+vector<stanza>typeone,typetwo;
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
 	ll n;
 	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	for(ll i=0;i<n;i++)
 	{
-		ll tmp;
+		string tmp;
 		cin>>tmp;
-		b.insert(tmp);
-	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
-	{
-		if(sieve[*it]!=0)
+		ll vowelcount=0;
+		char lastvowel;
+		for(ll i=0;i<tmp.size();i++)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
+			if((tmp[i]=='a')||(tmp[i]=='e')||(tmp[i]=='i')||(tmp[i]=='o')||(tmp[i]=='u'))
+			{
+				vowelcount++;
+				lastvowel=tmp[i];
+			}
 		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
-		}
+		mm[vowelcount][lastvowel-'a'].eb(tmp);
 	}
-	for(auto &x:a)
+	for(ll i=1;i<=n;i++)
 	{
-	    cout<<x<<" ";
+	    vector<string>bag;
+	    for(ll j=0;j<26;j++)
+	    {
+	       if(!mm[i][j].empty())
+	       {
+	           while(mm[i][j].size()>1)
+	           {
+	               string x=mm[i][j].back();
+	               mm[i][j].pop_back();
+	               string y=mm[i][j].back();
+	               mm[i][j].pop_back();
+	               stanza st=(stanza){x,y};
+	               typetwo.eb(st);
+	           }
+	           if(mm[i][j].size())
+	            bag.eb(mm[i][j][0]);
+	       }
+	    }
+	     while(bag.size()>1)
+	           {
+	               string x=bag.back();
+	               bag.pop_back();
+	               string y=bag.back();
+	               bag.pop_back();
+	               stanza st=(stanza){x,y};
+	               typeone.eb(st);
+	           }
 	}
+    while(typetwo.size()>typeone.size())
+    {
+        stanza lol=typetwo.back();
+        typetwo.pop_back();
+        typeone.push_back(lol);
+    }
+    cout<<typetwo.size()<<endl;
+    for(ll i=0;i<typetwo.size();i++)
+    {
+        cout<<typeone[i].word1<<" "<<typetwo[i].word1<<endl;
+        cout<<typeone[i].word2<<" "<<typetwo[i].word2<<endl;
+    }
     return 0;
 }

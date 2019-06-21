@@ -42,77 +42,33 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	ll n;
-	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	ll n,m;
+	cin>>n>>m;
+	vector<ll>arr(n);
+	for(ll i=0;i<n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
-	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
-	{
-		if(sieve[*it]!=0)
+		cin>>arr[i];
+		if(i>0)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
-		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			arr[i]+=arr[i-1];
 		}
 	}
-	for(auto &x:a)
+	for(ll i=0;i<m;i++)
 	{
-	    cout<<x<<" ";
+		ll num;
+		cin>>num;
+		ll pos=lower_bound(arr.begin(),arr.end(),num)-arr.begin();
+		ll lol=0;
+		if(pos>0)
+		{
+			lol=arr[pos-1];
+		}
+		num-=lol;
+		cout<<pos+1<<" "<<num<<endl;
 	}
     return 0;
 }

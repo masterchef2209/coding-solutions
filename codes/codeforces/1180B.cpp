@@ -42,77 +42,42 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
 	ll n;
 	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	vector<ll>arr(n);
+	for(ll i=0;i<n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
+		cin>>arr[i];
+		if(arr[i]>=0)
+			arr[i]=-1*arr[i]-1;
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
+	if(!(n&1))
 	{
-		if(sieve[*it]!=0)
+		for(ll i=0;i<n;i++)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
-		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			cout<<arr[i]<<" ";
 		}
 	}
-	for(auto &x:a)
+	else
 	{
-	    cout<<x<<" ";
+		ll flag=0;
+		ll gg=*min_element(arr.begin(),arr.end());
+		for(ll i=0;i<n;i++)
+		{
+			if(flag==0 && arr[i]==gg)
+			{
+				cout<<-1*arr[i]-1<<" ";
+				flag=1;
+			}
+			else
+			{
+				cout<<arr[i]<<" ";
+			}
+		}
 	}
     return 0;
 }

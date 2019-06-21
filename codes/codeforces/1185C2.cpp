@@ -42,77 +42,40 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	ll n;
-	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	ll n,m;
+	cin>>n>>m;
+	vector<ll>arr(n+1),sumsum(110,0);
+	for(ll i=1;i<=n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
+		cin>>arr[i];
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
+	for(ll i=1;i<=n;i++)
 	{
-		if(sieve[*it]!=0)
+		ll tmp=m-arr[i];
+		ll ss=0;
+		ll ans=0;
+		for(ll j=1;j<=100;j++)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
+			if(sumsum[j])
+			{
+				if(ss+j*sumsum[j]<=tmp)
+				{
+					ans+=sumsum[j];
+					ss+=(j*sumsum[j]);
+				}
+				else
+				{
+					ans+=(tmp-ss)/j;
+					break;
+				}
+			}
 		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
-		}
-	}
-	for(auto &x:a)
-	{
-	    cout<<x<<" ";
+		cout<<i-ans-1<<" ";
+		sumsum[arr[i]]++;
 	}
     return 0;
 }

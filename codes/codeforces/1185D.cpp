@@ -1,4 +1,7 @@
 		/*Read the problem carefully before starting to work on it*/
+
+//300 IQ solution idea by Illuminati97
+
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -42,77 +45,77 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
 	ll n;
 	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	vector< pair<ll,ll> >arr(n);
+	for(ll i=0;i<n;i++)
 	{
 		ll tmp;
 		cin>>tmp;
-		b.insert(tmp);
+		arr[i]=mp(tmp,i+1);
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
+	if(n==2)
 	{
-		if(sieve[*it]!=0)
+	    cout<<1;
+	    return 0;
+	}
+	sort(arr.begin(),arr.end());
+	map<ll,ll>mm;
+	for(ll i=1;i<n;i++)
+	{
+		mm[arr[i].fi-arr[i-1].fi]++;
+	}
+	for(ll i=0;i<n;i++)
+	{
+		if(i==0)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
+			mm[arr[i+1].fi-arr[i].fi]--;
+			if(mm[arr[i+1].fi-arr[i].fi]==0)
+				mm.erase(arr[i+1].fi-arr[i].fi);
+			if(mm.size()==1)
+			{
+				cout<<arr[i].se;
+				return 0;
+			}
+			mm[arr[i+1].fi-arr[i].fi]++;
+		}
+		else if(i==n-1)
+		{
+			mm[arr[i].fi-arr[i-1].fi]--;
+			if(mm[arr[i].fi-arr[i-1].fi]==0)
+				mm.erase(arr[i].fi-arr[i-1].fi);
+			if(mm.size()==1)
+			{
+				cout<<arr[i].se;
+				return 0;
+			}
+			mm[arr[i].fi-arr[i-1].fi]++;
 		}
 		else
 		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			mm[arr[i].fi-arr[i-1].fi]--;
+			if(mm[arr[i].fi-arr[i-1].fi]==0)
+				mm.erase(arr[i].fi-arr[i-1].fi);
+			mm[arr[i+1].fi-arr[i].fi]--;
+			if(mm[arr[i+1].fi-arr[i].fi]==0)
+				mm.erase(arr[i+1].fi-arr[i].fi);
+			mm[arr[i+1].fi-arr[i-1].fi]++;
+			if(mm.size()==1)
+			{
+				cout<<arr[i].se;
+				return 0;
+			}
+			mm[arr[i].fi-arr[i-1].fi]++;
+			mm[arr[i+1].fi-arr[i].fi]++;
+			mm[arr[i+1].fi-arr[i-1].fi]--;
+			if(mm[arr[i+1].fi-arr[i-1].fi]==0)
+				mm.erase(arr[i+1].fi-arr[i-1].fi);
 		}
 	}
-	for(auto &x:a)
-	{
-	    cout<<x<<" ";
-	}
+	cout<<-1;
     return 0;
 }

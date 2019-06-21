@@ -16,11 +16,11 @@ typedef complex<ld> cd;
 #define pb push_back
 #define eb emplace_back
 #define mp(x,y) make_pair(x,y)
-#define mod 1000000007
+const ll mod=1e9+7;
 
 double PI=3.1415926535897932384626;
 
-//template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
+template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
 
 #define bip(n) __builtin_popcount(n)//no of ones bit in binary!!
 #define bictz(n) __builtin_ctz(n)//no of trailing zeroes in binary!!
@@ -42,77 +42,64 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
+const ll MM=mod-1;
+
+typedef vector< vector<ll> > matrix;
 
 
-void precompute()
+matrix mul(const matrix &A,const matrix &B)
 {
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
+	matrix C(A.size(),vector<ll>(B[0].size(),0));
+	for(int i=0;i<A.size();i++)
 	{
-		if(sieve[i]==0)
+		for(int j=0;j<B[0].size();j++)
 		{
-			for(ll j=2*i;j<=2750133;j+=i)
+			for(int k=0;k<A.size();k++)
 			{
-				sieve[j]=1;
+				C[i][j]=(C[i][j]+A[i][k]*B[k][j])%MM;
 			}
 		}
 	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
+	return C;
 }
 
-
+matrix mpower(const matrix &A,ll p)
+{
+	if(p==1)
+		return A;
+	if(p&1)
+		return mul(A,mpower(A,p-1));
+	matrix X=mpower(A,p/2);
+	return mul(X,X);
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	ll n;
-	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	ll f[4];
+	ll n,c;
+	cin>>n>>f[1]>>f[2]>>f[3]>>c;
+	matrix T(3,vector<ll>(3));
+	T={
+								{0,1,0},
+								{0,0,1},
+								{1,1,1}
+	};
+	// gi=i+logc(fi)
+	// gn=g(n-1)+g(n-2)+g(n-3)
+	// for matrix exponentiation we wil use modulo as mod-1 because of Euler's theorem
+ 	T=mpower(T,n-3); // usually it is n-1 but here it is n-3 because we want gn at lowest position of matrix and not at topmost so we will multiply by T^(n-1-2)
+	ll deg[4];
+	deg[1]=T[2][0];
+	deg[2]=T[2][1];
+	deg[3]=T[2][2];
+	deg[0]=(((deg[1] + 2*deg[2] + 3*deg[3] - n ) % MM ) + MM ) % MM;
+	ll ans=power(c,deg[0]);
+	for(ll i=1;i<4;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
+		ans=((power(f[i],deg[i]))%mod*(ans%mod))%mod;
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
-	{
-		if(sieve[*it]!=0)
-		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
-		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
-		}
-	}
-	for(auto &x:a)
-	{
-	    cout<<x<<" ";
-	}
+	cout<<ans;
     return 0;
 }

@@ -1,4 +1,4 @@
-		/*Read the problem carefully before starting to work on it*/
+	/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -42,77 +42,51 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
-int sieve[2750133];
-multiset<ll>b,a;
-
-
-void precompute()
-{
-	sieve[0]=sieve[1]=1;
-	for(ll i=2;i*i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			for(ll j=2*i;j<=2750133;j+=i)
-			{
-				sieve[j]=1;
-			}
-		}
-	}
-	ll lol=1;
-	for(ll i=2;i<=2750133;i++)
-	{
-		if(sieve[i]==0)
-		{
-			sieve[i]=lol++;
-		}
-		else
-		{
-		    sieve[i]=0;
-		}
-	}
-}
-
-
+ll dp[226][(1LL<<15)+1][3];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	ll n;
-	cin>>n;
-	for(ll i=0;i<2*n;i++)
+	ll n,T;
+	cin>>n>>T;
+	vector<ll>t(n),g(n);
+	for(ll i=0;i<n;i++)
 	{
-		ll tmp;
-		cin>>tmp;
-		b.insert(tmp);
+		cin>>t[i]>>g[i];
+		g[i]-=1;
+		dp[t[i]][(1LL<<i)][g[i]]=1;
 	}
-	for(auto it=b.rbegin();it!=b.rend();it++)
+	for(ll i=0;i<=T;i++)
 	{
-		if(sieve[*it]!=0)
+		for(ll j=0;j<(1LL<<n);j++)
 		{
-			a.insert(sieve[*it]);
-			b.erase(b.find(sieve[*it]));
-			//cout<<*it<<" "<<pos+1<<endl;
-		}
-		else
-		{
-            ll val=*it;
-            for(ll i=2;i<=val;i++)
-            {
-                if(val%i==0)
-                {
-                    b.erase(b.find(val/i));
-                    break;
-                }
-            }
-            a.insert(val);
+			for(ll k=0;k<n;k++)
+			{
+				if((j&(1LL<<k))==0 )
+				{
+					if(i-t[k]>=0)
+					{
+						for(ll g2=0;g2<3;g2++)
+						{
+						    if(g2!=g[k])
+						    {
+						        dp[i][j|(1LL<<k)][g[k]]+=dp[i-t[k]][j][g2];
+							    dp[i][j|(1LL<<k)][g[k]]%=mod;
+						    }
+						}
+					}
+				}
+			}
 		}
 	}
-	for(auto &x:a)
+ 	ll ans=0;
+ 	for(ll i=0;i<(1LL<<n);i++)
+	for(ll gx=0;gx<3;gx++)
 	{
-	    cout<<x<<" ";
+		ans+=dp[T][i][gx];
+		ans%=mod;
 	}
+	cout<<ans;
     return 0;
 }
