@@ -12,6 +12,13 @@ combinactorics
 
 yC-Sagheer,the Hausmeister
 
+Geometry
+Math
+DP
+DS
+String
+Tech.(except DP)
+Impl.
 
 9.1099099099099
 
