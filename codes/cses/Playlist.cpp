@@ -1,3 +1,5 @@
+//not accepted
+
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -35,21 +37,21 @@ typedef vector<ll> vl;
 #define fi first
 #define se second
 
+set<int>s;
+map<int,int>ind;
+vector<int> arr(200005);
+
 int main(){
-	ios_base::sync_with_stdio(false); cin.tie(NULL);cout.tie(NULL);
-	ll n;
-	cin>>n;
-	set<ll>s;
-	map<ll,ll>ind;
-	vl arr(n+1);
-	ll ans=-1;
-	for(ll i=1;i<=n;i++)
+	int n;
+	scanf("%d",&n);
+	int ans=-1;
+	for(int i=1;i<=n;i++)
 	{
-	    cin>>arr[i];
+	    scanf("%d",&arr[i]);
 	}
-	for(ll i=1;i<=n;i++)
+	for(int i=1;i<=n;i++)
 	{
-		ll temp=arr[i];
+		int temp=arr[i];
 		if(s.find(temp)==s.end())
 		{
 			s.insert(temp);
@@ -57,16 +59,16 @@ int main(){
 		}
 		else
 		{
-			ans=max(ans,(ll)s.size());
+			ans=max(ans,(int)s.size());
 			s.clear();
-			for(ll j=ind[temp]+1;j<=i;j++)
+			for(int j=ind[temp]+1;j<=i;j++)
 			{
 			    s.insert(arr[j]);
 			}
 			ind[temp]=i;
 		}
 	}
-	ans=max(ans,(ll)s.size());
-	cout<<ans<<endl;
+	ans=max(ans,(int)s.size());
+	printf("%d",ans);
     return 0;
 }
