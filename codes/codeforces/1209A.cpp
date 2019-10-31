@@ -24,43 +24,48 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
 
-ll dp[SSIZE][2];
-ll arr[SSIZE];
-
+ll arr1[100005];
+set<ll>ss;
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	vector<ll>arr(n);
+	for(ll i=0;i<n;i++)
 	{
-	    cin>>arr[i];
+		cin>>arr[i];
 	}
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    if(arr[i]>0)
+		if(arr[i]==1)
+		{
+			cout<<1;
+			return 0;
+		}
+	}
+	sort(arr.begin(),arr.end());
+	for(ll i=0;i<n;i++)
+	{
+	    if(arr1[i]==0)
 	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
+	        arr1[i]=i+1;
+	        for(ll j=i+1;j<n;j++)
+	        {
+	            if(arr1[j]==0 && arr[j]%arr[i]==0)
+	            {
+	                arr1[j]=i+1;
+	            }
+	        }
 	    }
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
+	    ss.insert(arr1[i]);
 	}
-	cout<<neg<<" "<<pos;
+	cout<<(ss.size())<<"\n";
     return 0;
 }
 

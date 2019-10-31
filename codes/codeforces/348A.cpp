@@ -24,10 +24,6 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
@@ -35,32 +31,20 @@ int main()
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	vector<ll>arr(n);
+	double ans=0;
+	for(ll i=0;i<n;i++)
 	{
-	    cin>>arr[i];
+		cin>>arr[i];
+		ans+=arr[i];
 	}
-	for(ll i=1;i<=n;i++)
+	cout<<fixed<<setprecision(0);
+	ll pp=ceil(ans/(n-1));
+	for(ll i=0;i<n;i++)
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+	    pp=max(pp,arr[i]);
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
+	cout<<pp<<endl;
     return 0;
 }
 

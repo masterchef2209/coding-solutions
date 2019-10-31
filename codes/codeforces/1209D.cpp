@@ -24,43 +24,64 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
 
-ll dp[SSIZE][2];
-ll arr[SSIZE];
+#define SSIZE 100005
+
+ll n,k;
+
+ll parent[SSIZE];
+ll size[SSIZE];
+
+void make_set(ll i)
+{
+	parent[i]=i;
+	size[i]=1;
+}
+
+ll find_set(ll i)
+{
+	if(i==parent[i])
+		return i;
+	return parent[i]=find_set(parent[i]);
+}
+
+void union_sets(ll a,ll b)
+{
+	a=find_set(a);
+	b=find_set(b);
+	if(a!=b)
+	{
+		if(size[a]<size[b])
+			swap(a,b);
+		parent[b]=a;
+		size[a]+=size[b];
+	}
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	cin>>n>>k;
+	for(ll i=0;i<=n;i++)
 	{
-	    cin>>arr[i];
+		make_set(i);
 	}
-	for(ll i=1;i<=n;i++)
+	ll ans=0;
+	for(ll u=0;u<k;u++)
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+		ll a,b;
+		cin>>a>>b;
+		if(find_set(a)==find_set(b))
+		{
+			ans++;
+		}
+		else
+		{
+			union_sets(a,b);
+		}
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
+	cout<<ans;
     return 0;
 }
 

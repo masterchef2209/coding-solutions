@@ -24,43 +24,57 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	ll t;
+	cin>>t;
+	while(t--)
 	{
-	    cin>>arr[i];
+		string s;
+		cin>>s;
+		deque<ll>doo,de;
+		for(ll i=0;i<s.size();i++)
+		{
+			ll val=s[i]-'0';
+			if(val&1)
+			{
+				doo.pb(val);
+			}
+			else
+			{
+				de.pb(val);
+			}
+		}
+		while(!doo.empty() && !de.empty())
+		{
+			ll val1=doo.front();
+			ll val2=de.front();
+			if(val1<val2)
+			{
+				cout<<val1;
+				doo.pop_front();
+			}
+			else
+			{
+				cout<<val2;
+				de.pop_front();
+			}
+		}
+		while(!doo.empty())
+		{
+			cout<<doo.front();
+			doo.pop_front();
+		}
+		while(!de.empty())
+		{
+			cout<<de.front();
+			de.pop_front();
+		}
+		cout<<"\n";
 	}
-	for(ll i=1;i<=n;i++)
-	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
-	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
     return 0;
 }
 

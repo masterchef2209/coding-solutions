@@ -24,10 +24,13 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
 
-ll dp[SSIZE][2];
-ll arr[SSIZE];
+#define SSIZE 7005
+
+ll A[SSIZE];
+ll B[SSIZE];
+
+map<ll,ll>C;
 
 int main()
 {
@@ -35,32 +38,41 @@ int main()
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    cin>>arr[i];
+		cin>>A[i];
+		C[A[i]]++;
 	}
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    if(arr[i]>0)
+		cin>>B[i];
+	}
+	ll ans=0;
+	ll mask=0;
+	set<ll>bag;
+	for(ll i=0;i<n;i++)
+	{
+	    if(C[A[i]]>1)
 	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
+	        ans+=B[i];
+	        bag.insert(A[i]);
 	    }
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
+	    if(C[A[i]]==1)
+	    {
+	        for(auto &y:bag)
+	        {
+	            if((y|A[i])==y)
+	            {
+	                ans+=B[i];
+	                break;
+	            }
+	        }
+	    }
 	}
-	cout<<neg<<" "<<pos;
+	cout<<ans;
     return 0;
 }
 

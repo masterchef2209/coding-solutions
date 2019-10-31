@@ -24,43 +24,45 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
+	ll n,k;
+	cin>>n>>k;
+	vector<ll>arr(n+3,0);
 	for(ll i=1;i<=n;i++)
 	{
-	    cin>>arr[i];
+		cin>>arr[i];
 	}
-	for(ll i=1;i<=n;i++)
-	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
-	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
+	sort(arr.begin()+1,arr.begin()+n+1);
+	ll ans=arr[n]-arr[1];
+    // we have divided points into two parts and as size of set of points moved together increases the price of increasing the pointer increases, as we have divided sets into 2 parts making the loop to run till n/2 is enough, also it is optimal to move a pointer of faster speed than slower speed
+    for(ll i=1;i<=(n/2);i++)
+    {
+        ll val1=(arr[i+1]-arr[i])*i;
+        ll val2=(arr[n-i+1]-arr[n-i])*i;
+        if(k<val1)
+        {
+            ans-=(k/i);
+            break;
+        }
+        k-=val1;
+        ans-=arr[i+1]-arr[i];
+        if(k<=0)
+            break;
+        if(k<val2)
+        {
+            ans-=(k/i);
+            break;
+        }
+        k-=val2;
+        ans-=arr[n-i+1]-arr[n-i];
+        if(k<=0)
+            break;
+    }
+    cout<<max(0LL,ans);
     return 0;
 }
 

@@ -24,43 +24,38 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	ll arr[4];
+	for(ll i=0;i<4;i++)
 	{
 	    cin>>arr[i];
 	}
-	for(ll i=1;i<=n;i++)
+	ll sum=0;
+	for(ll i=0;i<4;i++)
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+		sum+=arr[i];
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<(1LL<<4);i++)
 	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
+		ll tem=0;
+		for(ll j=0;j<4;j++)
+		{
+			if(i&(1LL<<j))
+			{
+				tem+=arr[j];
+			}
+		}
+		if(tem==(sum-tem))
+		{
+			cout<<"YES\n";
+			return 0;
+		}
 	}
-	cout<<neg<<" "<<pos;
+	cout<<"NO";
     return 0;
 }
 

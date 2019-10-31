@@ -18,49 +18,42 @@ typedef long long ll;
 
 double PI=3.1415926535897932384626;
 
-//template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
+template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
 
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	ll t;
+	cin>>t;
+	while(t--)
 	{
-	    cin>>arr[i];
-	}
-	for(ll i=1;i<=n;i++)
-	{
-	    if(arr[i]>0)
+	    ll n;
+	    cin>>n;
+	    if(n<=3)
 	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
+	        cout<<n<<"\n";
+	        continue;
 	    }
-	    else
+	    ll rem=n%3;
+	    if(rem==0)
 	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
+	        cout<<power(3LL,n/3)<<"\n";
+	    }
+	    else if(rem==1)
+	    {
+	        cout<< (4*power(3LL,(n-4)/3))%mod <<"\n";
+	    }
+	    else if(rem==2)
+	    {
+	        cout<< (2*power(3LL,(n-2)/3))%mod <<"\n";
 	    }
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
     return 0;
 }
 

@@ -24,10 +24,30 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
+
 #define SSIZE 200005
 
-ll dp[SSIZE][2];
-ll arr[SSIZE];
+vector< vector<ll> >adj(SSIZE);
+vector< ll >visited(SSIZE,0);
+vector< ll >visited1(SSIZE,0);
+vector<ll>parent(SSIZE,0);
+
+ll ans=0;
+
+vector<ll>nodes;
+
+void dfs(ll curr,ll par,ll dist)
+{
+    visited[curr]=1;
+    parent[curr]=par;
+    for(auto &nei:adj[curr])
+    {
+        if(!visited[nei])
+            dfs(nei,curr,dist+1);
+    }
+    if(dist>2)
+        nodes.eb(curr);
+}
 
 int main()
 {
@@ -35,32 +55,27 @@ int main()
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	for(ll u=0;u<(n-1);u++)
 	{
-	    cin>>arr[i];
+		ll a,b;
+		cin>>a>>b;
+		adj[a].eb(b);
+		adj[b].eb(a);
 	}
-	for(ll i=1;i<=n;i++)
-	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
-	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
+	dfs(1,-1,0);
+    for(auto &x:nodes)
+    {
+        if(visited1[x]==0)
+        {
+            ans++;
+            visited1[parent[x]]=1;
+            for(auto &y:adj[parent[x]])
+            {
+                visited1[y]=1;
+            }
+        }
+    }
+    cout<<ans;
     return 0;
 }
 

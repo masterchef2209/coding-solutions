@@ -18,49 +18,38 @@ typedef long long ll;
 
 double PI=3.1415926535897932384626;
 
-//template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
+template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
 
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	ll t;
+	cin>>t;
+	while(t--)
 	{
-	    cin>>arr[i];
-	}
-	for(ll i=1;i<=n;i++)
-	{
-	    if(arr[i]>0)
+	    ll n,k;
+	    cin>>n>>k;
+	    double tmp=(double)k*log10(n);
+	    double tmp1=tmp-floor(tmp);
+	    ll ans=100.0*pow(10.0,tmp1);
+	    ll ans1=power(n,k,1000);
+	    cout<<ans<<"...";
+	    if(ans1==0)
 	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
+	        cout<<"000\n";
+	        continue;
 	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+	    ll dig=floor(log10(ans1))+1;
+	    ll xx=max(0LL,3-dig);
+	    string s(xx,'0');
+	    cout<<s<<ans1<<"\n";
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
     return 0;
 }
 

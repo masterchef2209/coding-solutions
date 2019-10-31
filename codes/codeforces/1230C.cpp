@@ -24,43 +24,64 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
 
-ll dp[SSIZE][2];
-ll arr[SSIZE];
+ll n,m;
+
+vector< set<ll> >adj(10);
+ll grid[10][10];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	cin>>n>>m;
+	for(ll i=0;i<m;i++)
 	{
-	    cin>>arr[i];
+		ll a,b;
+		cin>>a>>b;
+		adj[a].insert(b);
+		adj[b].insert(a);
+		grid[a][b]=1;
+		grid[b][a]=1;
+	}
+	if(n<=6)
+	{
+		cout<<m;
+		return 0;
 	}
 	for(ll i=1;i<=n;i++)
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+		if(adj[i].empty())
+		{
+			cout<<m;
+			return 0;
+		}
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
+	ll ans11=0;
+	for(ll pos=1;pos<=7;pos++)
 	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
+	    ll m1=m-adj[pos].size();
+        ll val=0;
+        for(ll i=1;i<=7;i++)
+        {
+            if(i==pos)
+                continue;
+            ll temp=0;
+            for(ll j=1;j<=7;j++)
+            {
+                if(j==pos)
+                    continue;
+                if(grid[i][j]==0)
+                {
+                    if(adj[pos].find(j)!=adj[pos].end())
+                        temp++;
+                }
+            }
+            val=max(temp,val);
+        }
+        ans11=max(val+m1,ans11);
 	}
-	cout<<neg<<" "<<pos;
+    cout<<ans11;
     return 0;
 }
 

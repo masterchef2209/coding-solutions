@@ -1,7 +1,4 @@
 		/*Read the problem carefully before starting to work on it*/
-
-//not accepted
-
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -28,82 +25,71 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+#define SSIZE 300505
+
 ll n;
 
-ll arr[300505][2];
-
-ll prefix[300505];
-ll suffix1[300505];
-ll suffix2[300505];
+ll arr[3][SSIZE];
+ll prefix[SSIZE];
+ll suffix[SSIZE];
+ll sufhelp[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	for(ll i=1;i<=2;i++)
 	{
-		cin>>arr[i][0];
+		for(ll j=1;j<=n;j++)
+		{
+			cin>>arr[i][j];
+		}
 	}
+	ll timer=0;
 	for(ll i=1;i<=n;i++)
 	{
-		cin>>arr[i][1];
-	}
-	for(ll i=1;i<=n;i++)
-	{
-		ll sum=0;
 		if(i&1)
 		{
-			sum+=(arr[i][0]*(2*i-2));
-			sum+=(arr[i][1]*(2*i-1));
-			prefix[i]=prefix[i-1]+sum;
+			prefix[i]+=(timer++)*arr[1][i];
+			prefix[i]+=(timer++)*arr[2][i];
+			prefix[i]+=prefix[i-1];
 		}
 		else
 		{
-			sum+=(arr[i][1]*(2*i-2));
-			sum+=(arr[i][0]*(2*i-1));
-			prefix[i]=prefix[i-1]+sum;
+			prefix[i]+=(timer++)*arr[2][i];
+			prefix[i]+=(timer++)*arr[1][i];
+			prefix[i]+=prefix[i-1];
 		}
 	}
-	ll toime=0;
-	for(ll i=1;i<=n;i++)
-	{
-		suffix1[i]+=((toime++)*arr[i][0]);
-	}
 	for(ll i=n;i>=1;i--)
 	{
-		suffix1[i]+=((toime++)*arr[i][1]);
+	    sufhelp[i]=sufhelp[i+1]+arr[1][i]+arr[2][i];
+	    if(i&1)
+	    {
+	        suffix[i]=suffix[i+2];
+	        suffix[i]+=arr[1][i]*(2*n-2*(n-i+1));
+	        suffix[i]+=arr[1][i+1]*(2*n-2*(n-i+1)+1);
+	        suffix[i]+=arr[2][i]*(2*n-1);
+	        suffix[i]+=arr[2][i+1]*(2*n-2);
+	        suffix[i]-=(2*sufhelp[i+2]);
+	    }
+	    else
+	    {
+	        suffix[i]=suffix[i+2];
+	        suffix[i]+=arr[2][i]*(2*n-2*(n-i+1));
+	        suffix[i]+=arr[2][i+1]*(2*n-2*(n-i+1)+1);
+	        suffix[i]+=arr[1][i]*(2*n-1);
+	        suffix[i]+=arr[1][i+1]*(2*n-2);
+	        suffix[i]-=(2*sufhelp[i+2]);
+	    }
 	}
-	for(ll i=n;i>=1;i--)
-	{
-		suffix1[i]+=suffix1[i+1];
-	}
-	toime=0;
-	for(ll i=1;i<=n;i++)
-	{
-		suffix2[i]+=((toime++)*arr[i][1]);
-	}
-	for(ll i=n;i>=1;i--)
-	{
-		suffix2[i]+=((toime++)*arr[i][0]);
-	}
-	for(ll i=n;i>=1;i--)
-	{
-		suffix2[i]+=suffix2[i+1];
-	}
-	ll ans=0;
+	ll ans=INT_MIN;
 	for(ll i=0;i<=n;i++)
 	{
-		if(i&1)
-		{
-			ans=max(ans,prefix[i]+suffix2[i+1]);
-		}
-		else
-		{
-			ans=max(ans,prefix[i]+suffix1[i+1]);
-		}
+	    ans=max(ans,prefix[i]+suffix[i+1]);
 	}
-
+	
 	cout<<ans;
     return 0;
 }

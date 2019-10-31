@@ -24,43 +24,52 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
 
-ll dp[SSIZE][2];
-ll arr[SSIZE];
+vector< vector<ll> >adj(610);
+
+long double dp[610];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n;
-	cin>>n;
-	for(ll i=1;i<=n;i++)
+	ll n,m;
+	cin>>n>>m;
+	for(ll i=0;i<m;i++)
 	{
-	    cin>>arr[i];
+		ll s,t;
+		cin>>s>>t;
+		adj[s].eb(t);
 	}
-	for(ll i=1;i<=n;i++)
+	long double ans=LLONG_MAX;
+	for(ll i=0;i<n;i++)
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+		// we will drop one edge at i
+		// i==0 means that we won't drop any edge
+		// dpj j=i+1...n is not affected by dpi
+		// it is optimal
+		dp[n]=0;
+		for(ll j=n-1;j>=1;j--)
+		{
+			long double sum=0.0;
+			long double mx=0.0;
+			ll num=adj[j].size();
+			for(auto &nei:adj[j])
+			{
+				sum+=dp[nei];
+				mx=max(mx,dp[nei]);
+			}
+			if(j==i && num>=2)
+			{
+				num--;
+				sum-=mx;
+			}
+			dp[j]=sum/num+1;
+		}
+		ans=min(ans,dp[1]);
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
+	cout<<fixed<<setprecision(10);
+	cout<<ans;
     return 0;
 }
 

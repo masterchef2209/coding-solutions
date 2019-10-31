@@ -24,10 +24,6 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
@@ -35,32 +31,38 @@ int main()
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	deque<ll>entry(n,0);
+	deque<ll>exi(n,0);
+	for(ll i=0;i<n;i++)
 	{
-	    cin>>arr[i];
+		cin>>entry[i];
 	}
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    if(arr[i]>0)
+	    cin>>exi[i];
+	}
+    vector<ll>flag(n+5,0);
+	ll ans=0;
+	for(ll i=0;i<n;i++)
+	{
+	    //cout<<exi[i]<<" "<<entry.front()<<"\n";
+	    if(exi[i]!=entry.front())
 	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
+	        //cout<<"yea ";
+	        ans++;
+	        flag[exi[i]]=1;
 	    }
 	    else
 	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
+	        //cout<<"nah "; 
+	        entry.pop_front();
+	        while(!entry.empty() && flag[entry.front()]==1)
+	        {
+	            entry.pop_front();
+	        }
 	    }
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
-	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
-	}
-	cout<<neg<<" "<<pos;
+	cout<<ans;
     return 0;
 }
 

@@ -24,10 +24,6 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
@@ -35,32 +31,58 @@ int main()
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	vector<ll>arr(n);
+	vector<ll>odd(n,0);
+	for(ll i=0;i<n;i++)
 	{
-	    cin>>arr[i];
+		cin>>arr[i];
+		ll hehe=abs(arr[i]);
+		if(hehe&1)
+		{
+			odd[i]=1;
+		}
 	}
-	for(ll i=1;i<=n;i++)
+	for(ll i=0;i<n;i++)
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+		if(arr[i]>=0)
+		{
+			arr[i]=(arr[i])/2;
+		}
+		else
+		{
+			arr[i]=(arr[i]-1)/2;
+		}
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
+// 	for(ll i=0;i<n;i++)
+// 	{
+// 	    cout<<arr[i]<<" ";
+// 	}
+	//cout<<endl;
+	ll sum=0;
+	for(ll i=0;i<n;i++)
 	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
+		sum+=arr[i];
 	}
-	cout<<neg<<" "<<pos;
+// 	cout<<sum<<endl;
+ 	ll pos=0;
+	while(pos<n)
+	{
+		if(odd[pos]==1)
+		{
+			if(sum==0)
+				break;
+			arr[pos]+=1;
+			sum++;
+			if(sum==0)
+				break;
+		}
+		pos++;
+	}
+	for(ll i=0;i<n;i++)
+	{
+		cout<<arr[i]<<"\n";
+	}
+//	cout<<sum<<endl;
     return 0;
 }
 

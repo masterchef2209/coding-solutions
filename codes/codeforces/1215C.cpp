@@ -24,10 +24,6 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-#define SSIZE 200005
-
-ll dp[SSIZE][2];
-ll arr[SSIZE];
 
 int main()
 {
@@ -35,32 +31,66 @@ int main()
 	cin.tie(NULL);
 	ll n;
 	cin>>n;
-	for(ll i=1;i<=n;i++)
+	string s1,s2;
+	cin>>s1>>s2;
+	ll ab=0,ba=0;
+	queue<ll>vab,vba;
+	ll a=0,b=0;
+	for(ll i=0;i<n;i++)
 	{
-	    cin>>arr[i];
+		if(s1[i]==s2[i])
+			continue;
+		if(s1[i]=='a')
+		{
+			ab++;
+			vab.push(i);		
+		}
+		else
+		{
+			ba++;
+			vba.push(i);
+		}
+		a++;
+		b++;
 	}
-	for(ll i=1;i<=n;i++)
+	if( (a&1)==1 || (b&1)==1  )
 	{
-	    if(arr[i]>0)
-	    {
-	        dp[i][0]+=dp[i-1][0];
-	        dp[i][1]+=dp[i-1][1];
-	        dp[i][0]+=1;
-	    }
-	    else
-	    {
-	        dp[i][0]+=dp[i-1][1];
-	        dp[i][1]+=dp[i-1][0];
-	        dp[i][1]+=1;
-	    }
+		cout<<-1;
 	}
-	ll neg=0,pos=0;
-	for(ll i=1;i<=n;i++)
+	else
 	{
-	    neg+=dp[i][1];
-	    pos+=dp[i][0];
+		vector< pair<ll,ll> >ans;
+		while(vab.size()>1)
+		{
+			ll one=vab.front();
+			vab.pop();
+			ll two=vab.front();
+			vab.pop();
+			ans.eb(one+1,two+1);
+		}
+		while(vba.size()>1)
+		{
+			ll one=vba.front();
+			vba.pop();
+			ll two=vba.front();
+			vba.pop();
+			ans.eb(one+1,two+1);
+		}
+		if(vab.size()>0)
+		{
+			ll one=vab.front();
+			vab.pop();
+			ll two=vba.front();
+			vba.pop();
+			ans.eb(one+1,one+1);
+			ans.eb(one+1,two+1);
+		}
+		cout<<(ans.size())<<"\n";
+		for(auto &x:ans)
+		{
+			cout<<x.fi<<" "<<x.se<<"\n";
+		}
 	}
-	cout<<neg<<" "<<pos;
     return 0;
 }
 

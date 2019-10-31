@@ -29,33 +29,50 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll t;
-	cin>>t;
-	while(t--)
+	ll a1,a2;
+	cin>>a1>>a2;
+	ll k1,k2;
+	cin>>k1>>k2;
+	ll n;
+	cin>>n;
+	ll tem1=max(0LL,(n-a1*(k1-1)-a2*(k2-1)) );
+	cout<<tem1<<" ";
+	ll tem2=0;
+	ll tem=0;
+	ll temm=0;
+	if(k1>k2)
 	{
-		ll st,in,exp;
-		cin>>st>>in>>exp;
-		if((st+exp)<=in)
-		{
-			cout<<0<<"\n";
-		}
-		else
-		{
-			ll lo=0,hi=exp;
-			while(lo<hi)
-			{
-			    ll mid=lo+(hi-lo+1)/2;
-			    if((st+(exp-mid))>(in+mid))
-			    {
-			        lo=mid;
-			    }
-			    else
-			    {
-			        hi=mid-1;
-			    }
-			}
-			cout<<(lo+1)<<"\n";
-		}
+	    swap(k1,k2);
+	    swap(a1,a2);
+	}
+	for(ll i=1;i<=a1;i++)
+	{
+		if(tem2>n)
+			break;
+		tem=temm;
+		temm++;
+		tem2+=k1;
+	}
+	if(tem2>n)
+	{
+	    cout<<tem;
+	    return 0;
+	}
+	for(ll i=1;i<=a2;i++)
+	{
+		if(tem2>n)
+			break;
+		tem=temm;
+		temm++;
+		tem2+=k2;
+	}
+	if(tem2>n)
+	{
+	    cout<<tem;
+	}
+	else
+	{
+        cout<<temm;
 	}
     return 0;
 }
