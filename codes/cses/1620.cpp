@@ -7,7 +7,7 @@
 using namespace std;
 //using namespace __gnu_pbds;
 
-typedef long long ll;
+typedef unsigned long long ll;
 
 //ll ncr(ll n,ll r){ll ans=1;r=min(r,n-r);for (int i=1;i<=r;i++){ans*=(n-r+i);ans/=i;}return ans;}
 
@@ -25,30 +25,42 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll n,t;
+vector<ll>arr(200005);
+
+bool check(ll num)
+{
+	ll cc=0;
+	for(ll i=0;i<n;i++)
+	{
+		cc+=(num/arr[i]);
+	}
+	return (cc>=t);
+}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>n>>t;
+	for(ll i=0;i<n;i++)
 	{
-		mme+=tem;
-		tem*=2;
+		cin>>arr[i];
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	ll lo=0,hi=1e18+1;
+	while(lo<hi)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		ll mid=lo+(hi-lo)/2;
+		if(check(mid))
+		{
+			hi=mid;
+		}
+		else
+		{
+			lo=mid+1;
+		}
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	cout<<lo<<"\n";
     return 0;
 }
 

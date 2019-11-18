@@ -25,30 +25,51 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+#define SSIZE 2010
+
+string s;
+
+ll palindrome[SSIZE][SSIZE];
+ll dp[SSIZE];
+ll sum[SSIZE];
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>s;
+	for(ll i=0;i<s.size();i++)
+		palindrome[i][i]=1;
+	for(ll i=0;i<(s.size()-1);i++)
 	{
-		mme+=tem;
-		tem*=2;
+		if(s[i]==s[i+1])
+			palindrome[i][i+1]=1;
+		else
+			palindrome[i][i+1]=0;
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	for(ll L=3;L<=s.size();L++)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		for(ll st=0,en=st+L-1;en<s.size();st++,en++)
+		{
+			palindrome[st][en]=(palindrome[st+1][en-1]&&(s[st]==s[en]));
+		}
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	dp[0]=0;
+	sum[0]=1;
+	for(ll i=1;i<s.size();i++)
+	{
+	    ll tem1=0;
+		for(ll j=1;j<=i;j++)
+		{
+			tem1+=(palindrome[j][i]*sum[j-1]);
+		}
+		dp[i]=dp[i-1]+tem1;
+		ll tem=0;
+		for(ll j=0;j<=i;j++)
+			tem+=palindrome[j][i];
+		sum[i]=sum[i-1]+tem;
+	}
+	cout<<dp[s.size()-1];
     return 0;
 }
 

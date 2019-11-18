@@ -25,30 +25,40 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll n;
+vector<ll>arr(20);
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>n;
+	ll sum1=0;
+	for(ll i=0;i<n;i++)
 	{
-		mme+=tem;
-		tem*=2;
+		cin>>arr[i];
+		sum1+=arr[i];
+		sum1%=360;
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	for(ll i=0;i<(1LL<<n);i++)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		ll sum=0;
+		for(ll j=0;j<n;j++)
+		{
+			if((i&(1LL<<j)))
+			{
+				sum+=arr[j];
+				sum%=360;
+			}
+		}
+		if( (sum1-sum+360)%360==(sum%360) )
+		{
+			cout<<"YES\n";
+			return 0;
+		}
+
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	cout<<"NO\n";
     return 0;
 }
 

@@ -25,30 +25,47 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+#define SSIZE 502
+
+ll n,k;
+ll c[SSIZE];
+short dp[SSIZE][SSIZE][SSIZE];
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>n>>k;
+	for(ll i=1;i<=n;i++)
 	{
-		mme+=tem;
-		tem*=2;
+		cin>>c[i];
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	dp[0][0][0]=1;
+	for(ll i=1;i<=n;i++)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		for(ll j=0;j<=k;j++)
+		{
+			for(ll u=0;u<=k;u++)
+			{
+				dp[i][j][u]|=dp[i-1][j][u];
+				if( (j-c[i])>=0 )
+					dp[i][j][u]|=dp[i-1][j-c[i]][u];
+				if( (j-c[i])>=0 && (u-c[i])>=0 )
+					dp[i][j][u]|=dp[i-1][j-c[i]][u-c[i]];
+			}
+		}
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	vector<ll>ans;
+	for(ll sum=0;sum<=k;sum++)
+	{
+		if(dp[n][k][sum])
+			ans.eb(sum);
+	}
+	cout<<ans.size()<<"\n";
+	for(auto &x:ans)
+	{
+		cout<<x<<" ";
+	}
     return 0;
 }
 

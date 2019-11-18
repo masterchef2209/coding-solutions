@@ -25,30 +25,49 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll n,m;
+set< pair<ll,ll> >edges;
+set<ll>rem;
+
+ll c=0;
+
+void dfs(ll curr)
+{
+    vector<ll>lol;
+	rem.erase(curr);
+	for(auto &nei:rem)
+	{
+	    if(!edges.count(mp(curr,nei)))
+	        lol.eb(nei);
+	}
+	for(auto &x:lol)
+	    rem.erase(x);
+	for(auto &x:lol)
+	    dfs(x);
+}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>n>>m;
+	for(ll u=0;u<m;u++)
 	{
-		mme+=tem;
-		tem*=2;
+		ll a,b;
+		cin>>a>>b;
+	    edges.insert(mp(a,b));
+	    edges.insert(mp(b,a));
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	for(ll i=1;i<=n;i++)
+	    rem.insert(i);
+	for(ll i=1;i<=n;i++)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+	        if(!rem.count(i))
+	            continue;
+			dfs(i);
+			c++;
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	cout<<(c-1);
     return 0;
 }
 

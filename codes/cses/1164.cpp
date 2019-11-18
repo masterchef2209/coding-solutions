@@ -29,27 +29,42 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll n;
+	cin>>n;
+	ll k=0;
+	multimap< pair<ll,ll> ,ll >mm;
+	for(ll u=0;u<n;u++)
 	{
-		mme+=tem;
-		tem*=2;
+		ll a,b;
+		cin>>a>>b;
+		mm.insert(mp(mp(a,b),u));
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	// simple greedy solution
+	priority_queue< pair<ll,ll> ,vector< pair<ll,ll> >,greater< pair<ll,ll> > >pq;
+	vector<ll>v(n);
+	for(auto it=mm.begin();it!=mm.end();it++)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		ll a,b,c;
+		a=(it->fi).fi;
+		b=(it->fi).se;
+		if(pq.empty() || pq.top().fi>=a )
+		{
+			c=++k;
+		}
+		else
+		{
+			c=pq.top().se;
+			pq.pop();
+		}
+		pq.push(mp(b,c));
+		v[it->se]=c;
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
-    return 0;
+	cout<<k<<"\n";
+	for(ll i=0;i<n;i++)
+	{
+		cout<<v[i]<<" ";
+	}
+	return 0;
 }
 
 

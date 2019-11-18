@@ -25,30 +25,46 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+bool isprime(ll num)
+{
+	for(ll i=2;i*i<=num;i++)
+	{
+		if(num%i==0)
+			return false;
+	}
+	return true;
+}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll n;
+	cin>>n;
+	if(isprime(n))
 	{
-		mme+=tem;
-		tem*=2;
+		cout<<n;
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	else
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		vector<ll>pp;
+		for(ll i=2;i*i<=n;i++)
+		{
+			if(n%i==0)
+			{
+				pp.eb(i);
+			}
+			while(n%i==0)
+				n/=i;
+		}
+		if(n>1)
+			pp.eb(n);
+		for(ll i=1;i<pp.size();i++)
+		{
+			pp[i]=__gcd(pp[i],pp[i-1]);
+		}
+		cout<<pp[pp.size()-1];
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
     return 0;
 }
 

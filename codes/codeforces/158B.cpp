@@ -29,26 +29,26 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll n;
+	cin>>n;
+	map<ll,ll>mm;
+	for(ll u=0;u<n;u++)
 	{
-		mme+=tem;
-		tem*=2;
+		ll x;
+		cin>>x;
+		mm[x]++;
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	ll ans=mm[4];
+	ans+=mm[3];
+	mm[1]=max(0LL,mm[1]-mm[3]);
+	if(mm[2]&1)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		mm[2]--;
+		mm[1]+=2;
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	ans+=(mm[2]/2);
+	ans+=((mm[1]+3)/4);
+	cout<<ans;
     return 0;
 }
 

@@ -25,30 +25,42 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll n,k,d;
+vector<ll>arr(200005);
+
+map<ll,ll>mm;
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll t;
+	cin>>t;
+	while(t--)
 	{
-		mme+=tem;
-		tem*=2;
+	    mm.clear();
+		cin>>n>>k>>d;
+		for(ll i=0;i<n;i++)
+			cin>>arr[i];
+		ll ans=LLONG_MAX;
+		for(ll i=0;i<n;i++)
+		{
+		    if(i>=d)
+		    {
+		        mm[arr[i-d]]--;
+		        if(mm[arr[i-d]]==0)
+		        {
+		            mm.erase(arr[i-d]);
+		        }
+		    }
+		    mm[arr[i]]++;
+		    if(i>=(d-1))
+		    {
+		        ans=min(ans,(ll)mm.size());    
+		    }
+		}
+		cout<<ans<<"\n";
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
-	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
-	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
     return 0;
 }
 

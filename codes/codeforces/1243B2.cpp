@@ -29,26 +29,68 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll k;
+	cin>>k;
+	while(k--)
 	{
-		mme+=tem;
-		tem*=2;
+		ll n;
+		cin>>n;
+		string s,t;
+		cin>>s>>t;
+		map<char,ll>mm;
+		for(ll i=0;i<n;i++)
+		{
+			mm[s[i]]++;
+		}
+		for(ll i=0;i<n;i++)
+		{
+			mm[t[i]]++;
+		}
+		int flag=0;
+		for(auto &x:mm)
+		{
+			if(x.se%2==1)
+			{
+				flag=1;
+				break;
+			}
+		}
+		if(flag)
+		{
+			cout<<"No\n";
+			continue;
+		}
+		cout<<"Yes\n";
+		vector< pair<ll,ll> >swwap;
+		for(ll i=0;i<s.size();i++)
+		{
+			if(s[i]!=t[i])
+			{
+				for(ll j=i+1;j<s.size();j++)
+				{
+					if(s[i]==s[j])
+					{
+						swap(t[i],s[j]);
+						swwap.eb(j+1,i+1);
+						break;
+					}
+					if(s[i]==t[j])
+					{
+						swap(s[j],t[j]);
+						swwap.eb(j+1,j+1);
+						swap(t[i],s[j]);
+						swwap.eb(j+1,i+1);
+						break;
+					}
+				}
+			}
+		}
+		cout<<(swwap.size())<<"\n";
+		for(auto &x:swwap)
+		{
+			cout<<x.fi<<" "<<x.se<<"\n";
+		}
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
-	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
-	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
     return 0;
 }
 

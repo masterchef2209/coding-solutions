@@ -29,26 +29,24 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll da,db;
+	cin>>da>>db;
+	if(da==db)
 	{
-		mme+=tem;
-		tem*=2;
+		cout<<da<<"12 "<<db<<"13";
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	else if((da+1)==db)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		cout<<da<<"99 "<<db<<"00";
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	else if(da==9 && db==1)
+	{
+		cout<<9<<" "<<10;
+	}
+	else
+	{
+		cout<<-1;
+	}
     return 0;
 }
 

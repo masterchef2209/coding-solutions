@@ -25,30 +25,33 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll n,p;
+
+bool check(ll k)
+{
+	ll val=n-k*p;
+	ll hehe=__builtin_popcount(val);
+	if(val<k)
+	    return false;
+	if(hehe>k)
+	    return false;
+    return true;
+}
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>n>>p;
+	for(ll i=1;i<=100;i++)
 	{
-		mme+=tem;
-		tem*=2;
+	    if(check(i))
+	    {
+	        cout<<i;
+	        return 0;
+	    }
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
-	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
-	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	cout<<-1;
     return 0;
 }
 

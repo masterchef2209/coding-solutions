@@ -25,30 +25,71 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll n,a,b;
+
+ll grid[1005][1005];
+
+set< pair<ll,ll> >ss;
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	cin>>n>>a>>b;
+	int flag=0;
+	if(b==1)
 	{
-		mme+=tem;
-		tem*=2;
+	    flag=1;
+		swap(a,b);
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	if(a!=1)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+		cout<<"NO\n";
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	else
+	{
+		if((n==2||n==3) && b==1)
+		{
+			cout<<"NO\n";
+		}
+		else
+		{
+			cout<<"YES\n";
+			ll lol=n-b;
+			ll curr=1;
+			for(ll i=1;i<=lol;i++)
+			{
+				ss.insert(mp(curr,curr+1));
+				ss.insert(mp(curr+1,curr));
+				curr++;
+			}
+			for(ll i=1;i<=n;i++)
+			{
+				for(ll j=1;j<=n;j++)
+				{
+					if(i==j)
+						continue;
+					pair<ll,ll>pp=mp(i,j);
+					if(ss.find(pp)!=ss.end())
+					{
+						grid[i][j]=0^flag;
+					}
+					else
+					{
+						grid[i][j]=1^flag;
+					}
+				}
+			}
+			for(ll i=1;i<=n;i++)
+			{
+				for(ll j=1;j<=n;j++)
+				{
+					cout<<grid[i][j];
+				}
+				cout<<"\n";
+			}
+		}
+	}
     return 0;
 }
 

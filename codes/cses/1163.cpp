@@ -25,30 +25,32 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+multiset<ll>dist;
+set<ll>lights;
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll x,n;
+	cin>>x>>n;
+	dist.insert(x);
+	lights.insert(0);
+	lights.insert(x);
+	for(ll u=0;u<n;u++)
 	{
-		mme+=tem;
-		tem*=2;
+		ll one;
+		cin>>one;
+		auto it=lights.lower_bound(one);
+		ll nex=*it;
+		it--;
+		ll pre=*it;
+		lights.insert(one);
+		dist.erase(dist.find(nex-pre));
+		dist.insert(nex-one);
+		dist.insert(one-pre);
+		cout<<*(dist.rbegin())<<" ";
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
-	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
-	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
     return 0;
 }
 

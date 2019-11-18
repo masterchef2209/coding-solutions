@@ -25,30 +25,63 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+map<ll,ll>mm;
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	ll n,k;
+	cin>>n>>k;
+	vector<ll>arr(n);
+	ll ans=0;
+	for(ll i=0;i<n;i++)
 	{
-		mme+=tem;
-		tem*=2;
+		cin>>arr[i];
+		ll dat=arr[i];
+		vector< pair<ll,ll> >data;
+		for(ll j=2;j*j<=arr[i];j++)
+		{
+			ll cnt=0;
+			while(dat%j==0)
+			{
+				cnt++;
+				dat/=j;
+			}
+			data.eb(j,cnt);
+		}
+		if(dat>1)
+			data.eb(dat,1);
+		ll curr=1;
+		ll reqd=1;
+		ll flag=0;
+		for(auto &x:data)
+		{
+			ll ff=x.fi;
+			ll ss=x.se;
+			ss%=k;
+			if(ss==0)
+				continue;
+			ll ss1=k-ss;
+			for(ll j=0;j<ss;j++)
+				curr*=ff;
+			for(ll j=0;j<ss1;j++)
+			{
+				reqd*=ff;
+				if(reqd>100000)
+				{
+					flag=1;
+					break;
+				}
+			}
+			if(flag)
+				break;
+		}
+		if(flag==0)
+			ans+=mm[reqd];
+		mm[curr]++;
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
-	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
-	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	cout<<ans;
     return 0;
 }
 

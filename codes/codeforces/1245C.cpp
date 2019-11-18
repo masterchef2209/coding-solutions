@@ -25,30 +25,63 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
+ll dp[100005];
+
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll n,l,r;
-	cin>>n>>l>>r;
-	ll mme=n-l;
-	ll tem=1;
-	for(ll u=0;u<(l);u++)
+	string s;
+	cin>>s;
+	for(ll i=0;i<s.size();i++)
 	{
-		mme+=tem;
-		tem*=2;
+	    if(s[i]=='m' || s[i]=='w')
+	    {
+	        cout<<0;
+	        return 0;
+	    }
 	}
-	ll mmo=0;
-	ll tem1=1;
-	ll prev=0;
-	for(ll i=0;i<(r);i++)
+	ll n=s.size();
+	if(n==1)
 	{
-		mmo+=tem1;
-		prev=tem1;
-		tem1*=2;
+	    cout<<1;
+	    return 0;
 	}
-	mmo+=(prev*(n-r));
-	cout<<mme<<" "<<mmo<<"\n";
+	dp[0]=1;
+	if((s[0]=='n' && s[1]=='n') || (s[0]=='u' && s[1]=='u'))
+	    dp[1]=2;
+	else
+	    dp[1]=1;
+	for(ll i=2;i<n;i++)
+	{
+	    if(s[i]=='u')
+	    {
+	        if(s[i-1]=='u')
+	        {
+	            dp[i]=(dp[i-1]%mod + dp[i-2]%mod)%mod;
+	        }
+	        else
+	        {
+	            dp[i]=dp[i-1];
+	        }
+	    }
+	    else if(s[i]=='n')
+	    {
+	        if(s[i-1]=='n')
+	        {
+	            dp[i]=(dp[i-1]%mod + dp[i-2]%mod)%mod;
+	        }
+	        else
+	        {
+	            dp[i]=dp[i-1];
+	        }
+	    }
+	    else
+	    {
+	        dp[i]=dp[i-1];
+	    }
+	}
+	cout<<dp[n-1];
     return 0;
 }
 
