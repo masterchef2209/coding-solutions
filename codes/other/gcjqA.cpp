@@ -46,7 +46,7 @@ int main()
 		cin>>n;
 		int j=0;
 		string a(""),b("");
-		while(j<n.size())
+		while(j<(ll)n.size())
 		{
 			if(n[j]=='4')
 			{
@@ -64,7 +64,7 @@ int main()
 		int k=0;
 		while(b[k]=='0')
 		    k++;
-		while(k<b.size())
+		while(k<(ll)b.size())
 		{
 		    cout<<b[k];
 		    k++;
