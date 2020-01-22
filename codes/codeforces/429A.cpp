@@ -1,8 +1,5 @@
 		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -30,40 +27,74 @@ double PI=3.1415926535897932384626;
 
 #define SSIZE 100005
 
-ll n,m,l;
+ll n;
 
-ll L[SSIZE];
-ll dp[SSIZE][12];
+vector< vector<ll> >adj(SSIZE);
+vector< ll >visited(SSIZE,0);
+
+ll val[SSIZE];
+ll target[SSIZE];
+
+vector<ll>ans;
+
+void dfs(ll curr,ll ev_lvl,ll odd_lvl,ll lvl)
+{
+	visited[curr]=1;
+	ll lvl1=lvl%2;
+	if(lvl1)
+	{
+		val[curr]^=odd_lvl;
+	}
+	else
+	{
+		val[curr]^=ev_lvl;
+	}
+	if(val[curr]!=target[curr])
+	{
+		ans.eb(curr);
+		val[curr]=target[curr];
+		if(lvl1)
+		{
+			odd_lvl^=1;
+		}
+		else
+		{
+			ev_lvl^=1;
+		}
+	}
+	for(auto &nei:adj[curr])
+	{
+		if(!visited[nei])
+			dfs(nei,ev_lvl,odd_lvl,lvl+1);
+	}
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
+	cin>>n;
+	for(ll i=0;i<(n-1);i++)
 	{
-		cin>>L[i];
-		L[i]%=m;
+		ll a,b;
+		cin>>a>>b;
+		adj[a].eb(b);
+		adj[b].eb(a);
 	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
-	{
-		mm[L[i]]++;
-	}
-	dp[0][0]=1;
 	for(ll i=1;i<=n;i++)
 	{
-		for(ll j=0;j<m;j++)
-		{
-			for(auto &cry:mm)
-			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
-			}
-		}
+		cin>>val[i];
 	}
-	cout<<dp[n][0];
+	for(ll j=1;j<=n;j++)
+	{
+		cin>>target[j];
+	}
+	dfs(1,0,0,0);
+	cout<<ans.size()<<endl;
+	for(auto &cont:ans)
+	{
+	    cout<<cont<<"\n";
+	}
     return 0;
 }
 

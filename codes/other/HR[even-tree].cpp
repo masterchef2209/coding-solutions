@@ -1,8 +1,5 @@
-		/*Read the problem carefully before starting to work on it*/
+        /*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -28,42 +25,48 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
-#define SSIZE 100005
+#define SSIZE 110
 
-ll n,m,l;
+ll n,m;
 
-ll L[SSIZE];
-ll dp[SSIZE][12];
+vector< vector<ll> >adj(SSIZE);
+vector<ll>visited(SSIZE,0);
+
+ll ans=0;
+
+ll dfs(ll curr)
+{
+    visited[curr]=1;
+    ll cc=0;
+    for(auto &nei:adj[curr])
+    {
+        if(visited[nei])
+            continue;
+        ll sub=dfs(nei);
+        if(sub%2==0)
+        {
+            ans++;
+            continue;
+        }
+        cc+=sub;
+    }
+    return cc+1;
+}
 
 int main()
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
-	{
-		cin>>L[i];
-		L[i]%=m;
-	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
-	{
-		mm[L[i]]++;
-	}
-	dp[0][0]=1;
-	for(ll i=1;i<=n;i++)
-	{
-		for(ll j=0;j<m;j++)
-		{
-			for(auto &cry:mm)
-			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
-			}
-		}
-	}
-	cout<<dp[n][0];
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin>>n>>m;
+    for(ll i=0;i<(n-1);i++)
+    {
+        ll a,b;
+        cin>>a>>b;
+        adj[a].eb(b);
+        adj[b].eb(a);
+    }
+    dfs(1);
+    cout<<ans;
     return 0;
 }
 

@@ -1,8 +1,5 @@
 		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -28,42 +25,77 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
-#define SSIZE 100005
+#define SSIZE 300005
+#define N 10
 
-ll n,m,l;
+ll grid[SSIZE][N];
 
-ll L[SSIZE];
-ll dp[SSIZE][12];
+ll n,m;
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
-	{
-		cin>>L[i];
-		L[i]%=m;
-	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
-	{
-		mm[L[i]]++;
-	}
-	dp[0][0]=1;
+	cin>>n>>m;
 	for(ll i=1;i<=n;i++)
 	{
-		for(ll j=0;j<m;j++)
+		for(ll j=1;j<=m;j++)
 		{
-			for(auto &cry:mm)
-			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
-			}
+			cin>>grid[i][j];
 		}
 	}
-	cout<<dp[n][0];
+	ll a=1,b=1;
+	ll lo=0,hi=1e9;
+	while(lo<hi)
+	{
+		ll mid=lo+(hi-lo+1)/2;
+		set<ll>tmp;
+		map<ll,ll>mm;
+		for(ll i=1;i<=n;i++)
+		{
+			ll mask=0;
+			for(ll j=1;j<=m;j++)
+			{
+				if(grid[i][j]>=mid)
+				{
+					mask+=(1LL<<(j-1));
+				}
+			}
+			tmp.insert(mask);
+			mm[mask]=i;
+		}
+		vector<ll>tmp1;
+		for(auto &x:tmp)
+		{
+			tmp1.eb(x);
+		}
+		ll fl=0;
+		for(ll i=0;i<tmp1.size();i++)
+		{
+			for(ll j=i;j<tmp1.size();j++)
+			{
+				ll val=tmp1[i]|tmp1[j];
+				if(val==((1LL<<m)-1))
+				{
+					a=mm[tmp1[i]];
+					b=mm[tmp1[j]];
+					fl=1;
+					break;
+				}
+			}
+			if(fl)
+				break;
+		}
+		if(fl==0)
+		{
+			hi=mid-1;
+		}
+		else
+		{
+			lo=mid;
+		}
+	}
+	cout<<a<<" "<<b;
     return 0;
 }
 

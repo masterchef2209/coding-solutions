@@ -1,8 +1,5 @@
 		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -27,43 +24,79 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
+#define SSIZE 200005
 
-#define SSIZE 100005
+ll n;
 
-ll n,m,l;
+set< pair<ll,ll> >dedges;
+vector< vector<ll> >adj(SSIZE);
+vector<ll>visited(SSIZE,0);
 
-ll L[SSIZE];
-ll dp[SSIZE][12];
+ll totalulti=0;
+ll dp[SSIZE];
+
+ll ans=LLONG_MAX;
+
+void dfs(ll curr)
+{
+	visited[curr]=1;
+	for(auto &nei:adj[curr])
+	{
+		if(visited[nei])
+			continue;
+		if(dedges.find(mp(curr,nei))==dedges.end())
+		{
+			totalulti++;
+		}
+		dfs(nei);
+	}
+}
+
+void dfs1(ll curr,ll ccount,ll ulti)
+{
+	visited[curr]=1;
+	dp[curr]=totalulti-2*ulti+ccount;
+	ans=min(ans,dp[curr]);
+	for(auto &nei:adj[curr])
+	{
+		if(visited[nei])
+			continue;
+		ll hehe=0;
+		if(dedges.find(mp(curr,nei))==dedges.end())
+		{
+			hehe=1;
+		}
+		dfs1(nei,ccount+1,ulti+hehe);
+	}
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
+	cin>>n;
+	for(ll i=0;i<(n-1);i++)
 	{
-		cin>>L[i];
-		L[i]%=m;
+		ll a,b;
+		cin>>a>>b;
+		dedges.insert(mp(a,b));
+		adj[a].eb(b);
+		adj[b].eb(a);
 	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
+	dfs(1);
+	for(ll i=0;i<=n;i++)
 	{
-		mm[L[i]]++;
+		visited[i]=0;
 	}
-	dp[0][0]=1;
+	dfs1(1,0,0);
+	cout<<ans<<"\n";
 	for(ll i=1;i<=n;i++)
 	{
-		for(ll j=0;j<m;j++)
+		if(dp[i]==ans)
 		{
-			for(auto &cry:mm)
-			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
-			}
+			cout<<i<<" ";
 		}
 	}
-	cout<<dp[n][0];
     return 0;
 }
 

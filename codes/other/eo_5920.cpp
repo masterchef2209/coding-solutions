@@ -1,8 +1,5 @@
-		/*Read the problem carefully before starting to work on it*/
+/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -28,42 +25,64 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
-#define SSIZE 100005
+struct node
+{
+	bool leaf;
+	node* child[26];
+};
 
-ll n,m,l;
+node* create()
+{
+	node* ret=new node();
+	for(ll i=0;i<26;i++)
+	{
+		ret->child[i]=NULL;
+	}	
+	ret->leaf=false;
+	return ret;
+}
 
-ll L[SSIZE];
-ll dp[SSIZE][12];
+void add(node *root,string &s)
+{
+	for(ll i=0;i<s.size();i++)
+	{
+		if(root->child[s[i]-'a']==NULL)
+		{
+			root->child[s[i]-'a']=create();
+		}
+		root=root->child[s[i]-'a'];
+	}
+	root->leaf=true;
+}
+
+ll ans=0;
+
+void dfs(node *root)
+{
+	ans++;
+	for(ll i=0;i<26;i++)
+	{
+		if(root->child[i]!=NULL)
+		{
+			dfs(root->child[i]);
+		}
+	}
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
+	node *root=create();
+	string s;
+	cin>>s;
+	for(ll i=0;i<s.size();i++)
 	{
-		cin>>L[i];
-		L[i]%=m;
+		string su=s.substr(i,s.size()-i);
+		add(root,su);
 	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
-	{
-		mm[L[i]]++;
-	}
-	dp[0][0]=1;
-	for(ll i=1;i<=n;i++)
-	{
-		for(ll j=0;j<m;j++)
-		{
-			for(auto &cry:mm)
-			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
-			}
-		}
-	}
-	cout<<dp[n][0];
+	dfs(root);
+cout<<ans-1;
     return 0;
 }
 

@@ -1,8 +1,5 @@
 		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -30,40 +27,48 @@ double PI=3.1415926535897932384626;
 
 #define SSIZE 100005
 
-ll n,m,l;
-
-ll L[SSIZE];
-ll dp[SSIZE][12];
+ll n,m;
+ll indegree[SSIZE];
+vector< vector<ll> >adj(SSIZE);
+ll ans[SSIZE];
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
+	cin>>n>>m;
+	for(ll i=0;i<m;i++)
 	{
-		cin>>L[i];
-		L[i]%=m;
+		ll a,b;
+		cin>>a>>b;
+		adj[b].eb(a);
+		indegree[a]++;
 	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
-	{
-		mm[L[i]]++;
-	}
-	dp[0][0]=1;
+	priority_queue< ll >pq;
 	for(ll i=1;i<=n;i++)
 	{
-		for(ll j=0;j<m;j++)
+		if(indegree[i]==0)
+			pq.push(i);
+	}
+	ll hehe=n;
+	while(!pq.empty())
+	{
+		ll curr=pq.top();
+		ans[curr]=hehe--;
+		pq.pop();
+		for(auto &nei:adj[curr])
 		{
-			for(auto &cry:mm)
+			indegree[nei]--;
+			if(indegree[nei]==0)
 			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
+				pq.push(nei);
 			}
 		}
 	}
-	cout<<dp[n][0];
+	for(ll i=1;i<=n;i++)
+	{
+	    cout<<ans[i]<<" ";
+	}
     return 0;
 }
 

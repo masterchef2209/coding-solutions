@@ -1,8 +1,5 @@
 		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
-
-//not accepted
-
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
 //#include <ext/pb_ds/assoc_container.hpp> 
@@ -30,40 +27,52 @@ double PI=3.1415926535897932384626;
 
 #define SSIZE 100005
 
-ll n,m,l;
+ll n;
+ll data[SSIZE];
 
-ll L[SSIZE];
-ll dp[SSIZE][12];
+ll ans=LLONG_MAX;
+ll sum=0;
+
+vector< vector<ll> >adj(SSIZE);
+vector<ll>visited(SSIZE,0);
+ll dp[SSIZE];
+
+void dfs(ll curr)
+{
+	visited[curr]=1;
+	dp[curr]=data[curr];
+	for(auto &nei:adj[curr])
+	{
+		if(visited[nei])
+			continue;
+		dfs(nei);
+		dp[curr]+=dp[nei];
+	}
+	ll val2=(sum-dp[curr]);
+	ll val3=abs(dp[curr]-val2);
+	ans=min(val3,ans);
+
+}
 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	cin>>n>>m>>l;
-	for(ll i=1;i<=l;i++)
-	{
-		cin>>L[i];
-		L[i]%=m;
-	}
-	map<ll,ll>mm;
-	for(ll i=1;i<=l;i++)
-	{
-		mm[L[i]]++;
-	}
-	dp[0][0]=1;
+	cin>>n;
 	for(ll i=1;i<=n;i++)
 	{
-		for(ll j=0;j<m;j++)
-		{
-			for(auto &cry:mm)
-			{
-				ll hehe=(dp[i-1][j]%mod * cry.se%mod)%mod;
-				dp[i][(j+cry.fi)%m]+=hehe;
-				dp[i][(j+cry.fi)%m]%=mod;
-			}
-		}
+		cin>>data[i];
+		sum+=data[i];
 	}
-	cout<<dp[n][0];
+	for(ll i=0;i<(n-1);i++)
+	{
+	   ll a,b;
+	   cin>>a>>b;
+	   adj[a].eb(b);
+	   adj[b].eb(a);
+	}
+	dfs(1);
+	cout<<ans;
     return 0;
 }
 
