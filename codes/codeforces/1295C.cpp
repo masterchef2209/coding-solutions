@@ -35,15 +35,15 @@ int main()
 	{
 		string s,t;
 		cin>>s>>t;
-		set<char>cry;
+		set<char> gg;
+		ll fl=0;
 		for(ll i=0;i<s.size();i++)
 		{
-			cry.insert(s[i]);
+			gg.insert(s[i]);
 		}
-		ll fl=0;
 		for(ll i=0;i<t.size();i++)
 		{
-			if(cry.find(t[i])==cry.end())
+			if(gg.find(t[i])==gg.end())
 			{
 				fl=1;
 				break;
@@ -54,28 +54,26 @@ int main()
 			cout<<"-1\n";
 			continue;
 		}
-		vector< vector<ll> >data(26);
-		ll pos[26]={0};
+		vector< set<ll> >data(26);
 		for(ll i=0;i<s.size();i++)
 		{
-			data[s[i]-'a'].eb(i);
+			data[s[i]-'a'].insert(i);
 		}
 		ll prev=-1;
 		ll ans=1;
-		for(ll j=0;j<t.size();j++)
+		for(ll i=0;i<t.size();)
 		{
-			ll hehe=t[j]-'a';
-			while(pos[hehe]<data[hehe].size() && data[hehe][pos[hehe]]<=prev)
-			    pos[hehe]++;
-			if(pos[hehe]==data[hehe].size())
+			ll hh=t[i]-'a';
+			if(data[hh].lower_bound(prev+1)==data[hh].end())
 			{
-				prev=-1;
 				ans++;
-				for(ll u=0;u<26;u++)
-					pos[u]=0;
+				prev=-1;
 			}
-			prev=data[hehe][pos[hehe]];
-			pos[hehe]++;
+			else
+			{
+				prev=*data[hh].lower_bound(prev+1);
+				i++;
+			}
 		}
 		cout<<ans<<endl;
 	}
