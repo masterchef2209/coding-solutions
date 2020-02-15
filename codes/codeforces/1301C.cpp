@@ -1,4 +1,5 @@
-/*Read the problem carefully before starting to work on it*/
+//dummy dum dum
+    /*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -7,9 +8,7 @@
 using namespace std;
 //using namespace __gnu_pbds;
  
-typedef long long ll;
- 
-//ll ncr(ll n,ll r){ll ans=1;r=min(r,n-r);for (int i=1;i<=r;i++){ans*=(n-r+i);ans/=i;}return ans;}
+typedef unsigned long long ll;
  
 #define pb push_back
 #define eb emplace_back
@@ -25,31 +24,33 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
  
-multiset<ll>dist;
-set<ll>lights;
- 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll x,n;
-	cin>>x>>n;
-	dist.insert(x);
-	lights.insert(0);
-	lights.insert(x);
-	for(ll u=0;u<n;u++)
+	int t;
+	cin>>t;
+	while(t--)
 	{
-		ll one;
-		cin>>one;
-		auto it=lights.lower_bound(one);
-		ll nex=*it;
-		it--;
-		ll pre=*it;
-		lights.insert(one);
-		dist.erase(dist.find(nex-pre));
-		dist.insert(nex-one);
-		dist.insert(one-pre);
-		cout<<*(dist.rbegin())<<" ";
+	    ll n,m;
+		cin>>n>>m;
+		ll ans;
+		if(n&1)
+		{
+			ans=n*((n+1)/2);
+		}
+		else
+		{
+			ans=(n/2)*(n+1);
+		}
+		n=n-m;
+        ll hehe=n/(m+1);
+        ll rem=n%(m+1);
+        ll alph=0;
+        alph+= ( rem*((1+hehe)*(1+hehe+1))/2);
+        ll lol=(m+1-rem)*( ((hehe)*(hehe+1))/2 );
+        alph+=lol;
+		cout<<(ans-alph)<<endl;
 	}
     return 0;
 }

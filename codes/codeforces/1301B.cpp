@@ -9,8 +9,6 @@ using namespace std;
  
 typedef long long ll;
  
-//ll ncr(ll n,ll r){ll ans=1;r=min(r,n-r);for (int i=1;i<=r;i++){ans*=(n-r+i);ans/=i;}return ans;}
- 
 #define pb push_back
 #define eb emplace_back
 #define mp(x,y) make_pair(x,y)
@@ -25,31 +23,58 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
  
-multiset<ll>dist;
-set<ll>lights;
- 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll x,n;
-	cin>>x>>n;
-	dist.insert(x);
-	lights.insert(0);
-	lights.insert(x);
-	for(ll u=0;u<n;u++)
+	ll t;
+	cin>>t;
+	while(t--)
 	{
-		ll one;
-		cin>>one;
-		auto it=lights.lower_bound(one);
-		ll nex=*it;
-		it--;
-		ll pre=*it;
-		lights.insert(one);
-		dist.erase(dist.find(nex-pre));
-		dist.insert(nex-one);
-		dist.insert(one-pre);
-		cout<<*(dist.rbegin())<<" ";
+		ll n;
+		cin>>n;
+		vector<ll>arr(n);
+		for(ll i=0;i<n;i++)
+		{
+			cin>>arr[i];
+		}
+		double sum=0;
+		set<ll>ss;
+		for(ll i=0;i<n;i++)
+		{
+			if(arr[i]!=-1)
+			{
+				if((i+1)<n && arr[i+1]==-1)
+					ss.insert(arr[i]);
+				if((i-1)>=0 && arr[i-1]==-1)
+					ss.insert(arr[i]);
+			}
+		}
+		sum+=(*ss.begin());
+		if(ss.size()>1)
+		{
+		    auto it=ss.end();
+		    it--;
+		    sum+=(*it);
+		}
+		if(ss.empty())
+		{
+		    cout<<0<<" "<<0<<endl;
+		    continue;
+		}
+		if(ss.size()>1)
+		    sum/=2.0;
+		ll val=round(sum);
+		for(ll i=0;i<n;i++)
+			if(arr[i]==-1)
+				arr[i]=val;
+		ll ans=LLONG_MIN;
+		for(ll i=0;i<(n-1);i++)
+		{
+			ll va=abs(arr[i+1]-arr[i]);
+			ans=max(ans,va);
+		}
+		cout<<ans<<" "<<val<<endl;
 	}
     return 0;
 }
