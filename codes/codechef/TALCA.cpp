@@ -42,8 +42,9 @@ double PI=3.1415926535897932384626;
 #define se second
 
 #define N 200005
-const ll LG=log2(N)+1;
-ll n,m;
+const int LG=log2(N)+1;
+
+int n,q;
 
 int tim=0;
 int parent[LG][N];
@@ -112,55 +113,34 @@ int dist(int u, int v)
 	return level[u] + level[v] - 2 * level[LCA(u, v)];
 }
 
-
-bool cmp(ll a,ll b)
-{
-	return level[a]>level[b];
-}
-
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	cin>>n>>m;
-	for(ll i=0;i<(n-1);i++)
+	cin>>n;
+	for(int i=0;i<(n-1);i++)
 	{
-		ll a,b;
+		int a,b;
 		cin>>a>>b;
 		g[a].eb(b);
 		g[b].eb(a);
 	}
 	dfs(1,0,1);
 	precompute();
-	for(ll i=0;i<m;i++)
+	cin>>q;
+	for(int i=0;i<q;i++)
 	{
-		ll k;
-		cin>>k;
-		vector<ll>arr;
-		for(ll i=0;i<k;i++)
-		{
-			ll tmp;
-			cin>>tmp;
-			arr.eb(tmp);
-		}
-		sort(arr.begin(),arr.end(),cmp);
-		bool ok=true;
-		for(ll i=1;i<k;i++)
-		{
-			ll one=arr[i-1];
-			ll two=arr[i];
-			ll three=LCA(one,two);
-			if(three!=two && three!=parent[0][two])
-			{
-				ok=false;
-				break;
-			}
-		}
-		if(ok)
-			cout<<"YES\n";
-		else
-			cout<<"NO\n";
+		int a,b,c;
+		cin>>a>>b>>c;
+		int d=LCA(a,b);
+		int e=LCA(a,c);
+		int f=LCA(b,c);
+		if(d==e)
+			cout<<f<<endl;
+		else if(e==f)
+			cout<<d<<endl;
+		else if(d==f)
+			cout<<e<<endl;
 	}
     return 0;
 }
@@ -169,6 +149,6 @@ int main()
 //252908XL
 
 /*
-faster solution can be implemented using euler tour trees + segment trees, queries are still O(log(n)) but preprocessing reduces from O(nlog(n)) to O(n)
-https://codeforces.com/contest/1328/submission/74776306
+comments:-
+
 */

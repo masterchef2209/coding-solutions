@@ -40,10 +40,9 @@ double PI=3.1415926535897932384626;
 
 #define fi first
 #define se second
-
-#define N 200005
-const ll LG=log2(N)+1;
-ll n,m;
+#define N 100005
+const int LG=log2(N)+1;
+int n,q;
 
 int tim=0;
 int parent[LG][N];
@@ -112,7 +111,6 @@ int dist(int u, int v)
 	return level[u] + level[v] - 2 * level[LCA(u, v)];
 }
 
-
 bool cmp(ll a,ll b)
 {
 	return level[a]>level[b];
@@ -122,45 +120,33 @@ int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	cin>>n>>m;
-	for(ll i=0;i<(n-1);i++)
+	cin>>n>>q;
+	for(int i=2;i<=(n);i++)
 	{
-		ll a,b;
-		cin>>a>>b;
-		g[a].eb(b);
-		g[b].eb(a);
+		int p;
+		cin>>p;
+		g[p].eb(i);
+		g[i].eb(p);
 	}
 	dfs(1,0,1);
 	precompute();
-	for(ll i=0;i<m;i++)
+	for(int u=0;u<q;u++)
 	{
-		ll k;
-		cin>>k;
-		vector<ll>arr;
-		for(ll i=0;i<k;i++)
-		{
-			ll tmp;
-			cin>>tmp;
-			arr.eb(tmp);
-		}
-		sort(arr.begin(),arr.end(),cmp);
-		bool ok=true;
-		for(ll i=1;i<k;i++)
-		{
-			ll one=arr[i-1];
-			ll two=arr[i];
-			ll three=LCA(one,two);
-			if(three!=two && three!=parent[0][two])
-			{
-				ok=false;
-				break;
-			}
-		}
-		if(ok)
-			cout<<"YES\n";
-		else
-			cout<<"NO\n";
+		int a,b,c;
+		cin>>a>>b>>c;
+		vector<ll>tmp;
+		tmp.eb(LCA(a,b));
+		tmp.eb(LCA(b,c));
+		tmp.eb(LCA(a,c));
+		sort(tmp.begin(),tmp.end(),cmp);
+		int d=tmp[0];
+		int dist1=dist(a,d);
+		int dist2=dist(b,d);
+		int dist3=dist(c,d);
+		int ans=dist1;
+		ans=max(ans,dist2);
+		ans=max(ans,dist3);
+		cout<<ans+1<<endl;
 	}
     return 0;
 }
@@ -169,6 +155,6 @@ int main()
 //252908XL
 
 /*
-faster solution can be implemented using euler tour trees + segment trees, queries are still O(log(n)) but preprocessing reduces from O(nlog(n)) to O(n)
-https://codeforces.com/contest/1328/submission/74776306
+comments:-
+
 */

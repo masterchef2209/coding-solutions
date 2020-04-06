@@ -1,4 +1,4 @@
-		/*Read the problem carefully before starting to work on it*/
+/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -6,23 +6,23 @@
 //#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 //using namespace __gnu_pbds;
-
-typedef long long ll;
-
+ 
+typedef int ll;
+ 
 #define pb push_back
 #define eb emplace_back
 #define mp(x,y) make_pair(x,y)
 #define mod 1000000007
-
+ 
 double PI=3.1415926535897932384626;
-
+ 
 //template<typename T> T power(T x,T y,ll m=mod){T ans=1;while(y>0){if(y&1LL) ans=(ans*x)%m;y>>=1LL;x=(x*x)%m;}return ans%m;}
-
+ 
 //typedef tree<ll,null_type,less<ll>,rb_tree_tag,tree_order_statistics_node_update> ost;
-
+ 
 //mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
 //#define rnd(x, y) uniform_int_distribution<ll>(x, y)(rng)
-
+ 
 //struct custom_hash {
 //    static uint64_t splitmix64(uint64_t x) {
 //        // http://xorshift.di.unimi.it/splitmix64.c
@@ -37,19 +37,19 @@ double PI=3.1415926535897932384626;
 //        return splitmix64(x + FIXED_RANDOM);
 //    }
 //};
-
+ 
 #define fi first
 #define se second
-
-#define N 200005
-const ll LG=log2(N)+1;
-ll n,m;
-
+ 
+#define N 1000016
+const int LG=log2(N)+1;
+ 
+int n,q;
 int tim=0;
 int parent[LG][N];
 int tin[N], tout[N], level[N];
 vector<int> g[N];
-
+ 
 void dfs(int k, int par, int lvl)
 {
 	tin[k]=++tim;
@@ -63,7 +63,7 @@ void dfs(int k, int par, int lvl)
 	}
 	tout[k]=tim;
 }
-
+ 
 int walk(int u, int h)
 {
 	for(int i=LG-1;i>=0;i--)
@@ -73,7 +73,7 @@ int walk(int u, int h)
 	}
 	return u;
 }
-
+ 
 void precompute()
 {
 	for(int i=1;i<LG;i++)
@@ -81,7 +81,7 @@ void precompute()
 			if(parent[i-1][j])
 				parent[i][j]=parent[i-1][parent[i-1][j]];
 }
-
+ 
 int LCA(int u, int v)
 {
 	if(level[u]<level[v])
@@ -106,69 +106,62 @@ int LCA(int u, int v)
 	}
 	return parent[0][u];
 }
-
+ 
 int dist(int u, int v)
 {
 	return level[u] + level[v] - 2 * level[LCA(u, v)];
 }
-
-
-bool cmp(ll a,ll b)
-{
-	return level[a]>level[b];
-}
-
+ 
+ll qq[N];
+ll dia=2;
+ 
 int main()
 {
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	precompute();
-	cin>>n>>m;
-	for(ll i=0;i<(n-1);i++)
+	n=4;
+	cin>>q;
+	g[1].eb(2);
+	g[1].eb(3);
+	g[1].eb(4);
+	for(ll i=0;i<q;i++)
 	{
-		ll a,b;
-		cin>>a>>b;
-		g[a].eb(b);
-		g[b].eb(a);
+		cin>>qq[i];
+		g[qq[i]].eb(n+1);
+		g[qq[i]].eb(n+2);
+		qq[i]=n+1;
+		n+=2;
 	}
 	dfs(1,0,1);
 	precompute();
-	for(ll i=0;i<m;i++)
+	ll v1=2;
+	ll v2=4;
+	for(ll i=0;i<q;i++)
 	{
-		ll k;
-		cin>>k;
-		vector<ll>arr;
-		for(ll i=0;i<k;i++)
+	    //cout<<v1<<" "<<v2<<endl;
+		ll d1=dist(qq[i],v1);
+		ll d2=dist(qq[i],v2);
+		if(d1>dia)
 		{
-			ll tmp;
-			cin>>tmp;
-			arr.eb(tmp);
+			dia=d1;
+			v2=qq[i];
 		}
-		sort(arr.begin(),arr.end(),cmp);
-		bool ok=true;
-		for(ll i=1;i<k;i++)
+		if(d2>dia)
 		{
-			ll one=arr[i-1];
-			ll two=arr[i];
-			ll three=LCA(one,two);
-			if(three!=two && three!=parent[0][two])
-			{
-				ok=false;
-				break;
-			}
+			dia=d2;
+			v1=qq[i];
 		}
-		if(ok)
-			cout<<"YES\n";
-		else
-			cout<<"NO\n";
+		cout<<dia<<endl;
 	}
     return 0;
 }
-
-
+ 
+ 
 //252908XL
-
+ 
 /*
-faster solution can be implemented using euler tour trees + segment trees, queries are still O(log(n)) but preprocessing reduces from O(nlog(n)) to O(n)
-https://codeforces.com/contest/1328/submission/74776306
+comments:-
+one of the niceset LCA problem i have seen till now, the problem involves maintaining the dynamic diameter of a tree 
+as it is build, the solution just involves moving 2 pointers greedily which denote the end points of a diameter. The diameter length is denoted by
+distance formula between 2 nodes of a tree which involves use of LCA.
 */
