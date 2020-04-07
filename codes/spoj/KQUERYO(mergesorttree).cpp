@@ -1,4 +1,4 @@
-        /*Read the problem carefully before starting to work on it*/
+		/*Read the problem carefully before starting to work on it*/
 #include <bits/stdc++.h>
 //#include <boost/multiprecision/cpp_int.hpp>
 //using namespace boost::multiprecision;
@@ -41,96 +41,68 @@ double PI=3.1415926535897932384626;
 #define fi first
 #define se second
 
-#define SSIZE 1<<16
-
-struct data{
-    ll ts;
-    ll ps;
-    ll ss;
-    ll ans;
-    data()
-    {
-        ts=ps=ss=ans=0;
-    }
-};
-
+#define SSIZE 30004
+ll pre=0;
 ll n;
-ll arr[SSIZE];
-data t[2*SSIZE];
-
-data combine(data l,data r)
-{
-    data ret;
-    ret.ts=l.ts+r.ts;
-    ret.ss=max(r.ss,r.ts+l.ss);
-    ret.ps=max(l.ps,l.ts+r.ps);
-    ret.ans=max(max(l.ans,r.ans),l.ss+r.ps);
-    return ret;
-}
-
-data makedata(ll val)
-{
-    data ret;
-    ret.ts=val;
-    ret.ps=ret.ss=ret.ans=val;
-    return ret;
-}
+vector<ll> t[4*SSIZE];
+ll arr[4*SSIZE];
 
 void build(ll v,ll tl,ll tr)
 {
-    if(tl==tr)
-    {
-        t[v]=makedata(arr[tl]);
-    }
-    else
-    {
-        ll tm=(tl+tr)/2;
-        build(v*2,tl,tm);
-        build(v*2+1,tm+1,tr);
-        t[v]=combine(t[v*2],t[v*2+1]);
-    }
+	if(tl==tr)
+	{
+		t[v].eb(arr[tl]);
+		return;
+	}
+	ll tm=(tl+tr)/2;
+	build(v*2,tl,tm);
+	build(v*2+1,tm+1,tr);
+	t[v].resize((t[v*2].size()+t[v*2+1].size()));
+	merge(t[v*2].begin(),t[v*2].end(),t[v*2+1].begin(),t[v*2+1].end(),t[v].begin());
 }
 
-data query(ll v,ll l,ll r,ll tl,ll tr)
+ll query(ll v,ll tl,ll tr,ll l,ll r,ll k)
 {
-    if(l>r)
-    {
-        data cry= makedata(-1000000);
-        return cry;
-    }
-    if(r<tl || l>tr)
-    {
-        data cry= makedata(-1000000);
-        return cry;
-    }
-    if(l<=tl && r>=tr)
-    {
-        return t[v];
-    }
-    ll tm=(tl+tr)/2;
-    return combine(query(v*2,l,r,tl,tm),query(v*2+1,l,r,tm+1,tr));
+	if(l>r)
+		return 0;
+	if(r<tl || l>tr)
+		return 0;
+	if(l<=tl && r>=tr)
+	{
+		auto it=upper_bound(t[v].begin(),t[v].end(),k);
+		return (t[v].end()-it);
+	}
+	ll tm=(tl+tr)/2;
+	ll one=query(v*2,tl,tm,l,r,k);
+	ll two=query(v*2+1,tm+1,tr,l,r,k);
+	return (one+two);
 }
 
 int main()
 {
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cin>>n;
-    for(ll i=0;i<n;i++)
-    {
-        cin>>arr[i];
-    }
-    build(1,0,n-1);
-    ll m;
-    cin>>m;
-    while(m--)
-    {
-        ll l,r;
-        cin>>l>>r;
-        l--;
-        r--;
-        cout<<query(1,l,r,0,n-1).ans<<endl;
-    }
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cin>>n;
+	for(ll i=0;i<n;i++)
+	{
+		cin>>arr[i];
+	}
+	build(1,0,n-1);
+	ll m;
+	cin>>m;
+	while(m--)
+	{
+		ll a,b,c;
+		cin>>a>>b>>c;
+		a^=pre;
+		b^=pre;
+		c^=pre;
+		a--;
+		b--;
+		ll ans=query(1,0,n-1,a,b,c);
+		cout<<ans<<"\n";
+		pre=ans;
+	}
     return 0;
 }
 
